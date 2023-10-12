@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Heading } from "../components";
+import { Css, Footer, Header, Heading, Main } from "../components";
 import {
   Tabs,
   TabsContent,
@@ -25,17 +25,19 @@ const Template = () => {
       <div className="flex justify-between items-center mb-6">
         <Heading title="Template" />
         <div className="space-x-2">
-          <Button className="py-1 px-2 md:py-2 md:px-4 text-sm" onClick={handleAddClick}>
+          <Button
+            className="py-1 px-2 md:py-2 md:px-4 text-sm"
+            onClick={handleAddClick}>
             Add {activeTab}
           </Button>
         </div>
       </div>
-      <Tabs defaultValue="template" className="w-full">
+      <Tabs defaultValue="main" className="w-full">
         <TabsList className="w-full">
           <TabsTrigger
             onClick={() => handleActiveTab("main")}
             className="w-full"
-            value="template">
+            value="main">
             Main
           </TabsTrigger>
           <TabsTrigger
@@ -57,17 +59,17 @@ const Template = () => {
             Css
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="template">
-
+        <TabsContent value="main">
+          <Main />
         </TabsContent>
         <TabsContent value="header">
-
+          <Header />
         </TabsContent>
         <TabsContent value="footer">
-
+          <Footer />
         </TabsContent>
         <TabsContent value="css">
-
+          <Css />
         </TabsContent>
       </Tabs>
     </section>
