@@ -8,8 +8,10 @@ const App = () => {
       <div className="col-span-3 p-4">
         <Sidebar />
       </div>
-      <div className="col-span-9 p-4">
-        <Outlet />
+      <div className="col-span-9 py-4">
+        <div className="container mx-auto">
+          <Outlet />
+        </div>
       </div>
     </main>
   );
