@@ -25,8 +25,7 @@ const List = ({ items, title, subtitle, handleDelete }) => {
       <ul className="space-y-2 mt-4">
         {items.map((item) => (
           <div key={item.id}>
-            <li
-              className="font-semibold text-base md:text-xl relative bg-slate-100 p-4 rounded-md capitalize pr-24">
+            <li className="font-semibold text-base md:text-xl relative bg-slate-100 p-4 rounded-md capitalize pr-24 mb-2">
               {Array.isArray(item.value) ? item.value.join(", ") : item.value}
               {handleDelete && (
                 <Dialog>
@@ -39,40 +38,29 @@ const List = ({ items, title, subtitle, handleDelete }) => {
                     <DialogHeader>
                       <DialogTitle>Delete item</DialogTitle>
                       <DialogDescription>
-                        Make sure that item is not selected to any tab.
+                        Make sure that item is not connected to any tab. <br/>
+                        All tabs will be affected by this action.
                       </DialogDescription>
                     </DialogHeader>
                     <div>
                       {items.find((elem) => elem.id === item.id).isSelected ? (
-                        <>
-                          <span>
-                            Item is selected within tabs.
-                            <br />
-                            Delete it from the selected items?
-                          </span>
-                          <DialogFooter className="mt-4">
-                            <Button
-                              onClick={() => handleDelete(item.id)}
-                              type="button"
-                              variant="destructive">
-                              Delete
-                            </Button>
-                          </DialogFooter>
-                        </>
+                        <span>
+                          Item is selected within tabs.
+                          <br />
+                          Delete it from the selected items?
+                        </span>
                       ) : (
-                        <>
-                          <span>Item is not selected.</span>
-                          <DialogFooter className="mt-4">
-                            <Button
-                              onClick={() => handleDelete(item.id)}
-                              type="button"
-                              variant="destructive">
-                              Delete
-                            </Button>
-                          </DialogFooter>
-                        </>
+                        <span>Item is not selected.</span>
                       )}
                     </div>
+                    <DialogFooter>
+                      <Button
+                        onClick={() => handleDelete(item.id)}
+                        type="button"
+                        variant="destructive">
+                        Delete
+                      </Button>
+                    </DialogFooter>
                   </DialogContent>
                 </Dialog>
               )}

@@ -3,13 +3,15 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import { useTitle } from "../hooks/useTitle";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { List } from ".";
 import { useTab } from "../hooks/useTab";
+import { useValue } from "../hooks/useValue";
 
 const TitleContent = ({ isFormOpen, setFormClose }) => {
   const [titles, setTitles] = useTitle();
   const [tabs, setTabs] = useTab();
+  const [values, setValues] = useValue();
 
   const handleForm = ({ title_name }) => {
     const newTitle = {
@@ -21,8 +23,13 @@ const TitleContent = ({ isFormOpen, setFormClose }) => {
     setTitles((prev) => [...prev, newTitle]);
     setFormClose();
   };
-
   const handleDelete = (id) => {
+    let valuesId = []
+    for (const tab of tabs) {
+      if (tab.data.length) {
+        valuesId.push(tab.data.find((item) => item.titleId === id).valueId)
+      }
+    }
     setTitles((prev) => prev.filter((elem) => elem.id !== id));
     setTabs((prev) =>
       prev.map((item) => {
@@ -35,12 +42,29 @@ const TitleContent = ({ isFormOpen, setFormClose }) => {
         return item;
       })
     );
-  }
+    setValues((prev) => {
+      return prev.map((item) => {
+        if (valuesId.includes(item.id)) {
+          return {
+            ...item,
+            isSelected: false,
+          };
+        }
+        return item;
+      });
+    });
+    valuesId = []
+  };
 
   return (
     <div>
       {isFormOpen && <TitleForm titles={titles} handleForm={handleForm} />}
-      <List handleDelete={handleDelete} items={titles} title="Titles" subtitle={"Manage created titles."}/>
+      <List
+        handleDelete={handleDelete}
+        items={titles}
+        title="Titles"
+        subtitle={"Manage created titles."}
+      />
     </div>
   );
 };

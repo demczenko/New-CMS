@@ -5,10 +5,12 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { List } from ".";
 import { useTab } from "../hooks/useTab";
+import { useTitle } from "../hooks/useTitle";
 
 const ValueContent = ({ isFormOpen, setFormClose }) => {
   const [values, setValues] = useValue();
   const [tabs, setTabs] = useTab();
+  const [titles, setTitles] = useTitle();
 
   const handleForm = ({ value_name }) => {
     const newValue = {
@@ -20,7 +22,32 @@ const ValueContent = ({ isFormOpen, setFormClose }) => {
     setFormClose();
   };
 
+  const isTitleIdTakenToManyTabs = (titleId) => {
+    const tabsId = [];
+    tabs.forEach((item) => {
+      if (item.data.length) {
+        tabsId.push(item.data.find((elem) => elem.titleId === titleId));
+      }
+    });
+
+    if (tabsId.length > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const handleDeleteValue = (id) => {
+    let titleId;
+    for (const tab of tabs) {
+      if (tab.data.length) {
+        let result = tab.data.find((item) => item.valueId === id);
+        if (result) {
+          titleId = result.titleId;
+        }
+      }
+    }
+
     setValues((prev) => prev.filter((elem) => elem.id !== id));
     setTabs((prev) =>
       prev.map((item) => {
@@ -33,6 +60,24 @@ const ValueContent = ({ isFormOpen, setFormClose }) => {
         return item;
       })
     );
+
+    if (isTitleIdTakenToManyTabs(titleId)) {
+      return
+    } else {
+      setTitles((prev) => {
+        return prev.map((item) => {
+          if (item.id === titleId) {
+            return {
+              ...item,
+              isSelected: false,
+            };
+          }
+          return item;
+        });
+      });
+      titleId = "";
+      console.log("title is not selected to many tabs");
+    }
   };
 
   return (
