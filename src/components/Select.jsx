@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import {
   Select,
   SelectContent,
@@ -7,21 +8,26 @@ import {
   SelectValue,
 } from "./ui/select";
 
-const SelectComponent = ({ placeholder, items }) => {
+const SelectComponent = forwardRef(function SelectComponent(
+  { placeholder, items, ...props },
+  ref
+) {
   return (
-    <Select className="col-span-1">
-      <SelectTrigger>
+    <Select {...props} className="col-span-1">
+      <SelectTrigger ref={ref}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           {items.map((item) => (
-            <SelectItem value={item.value}>{item.title}</SelectItem>
+            <SelectItem key={item.id} value={item.id}>
+              {Array.isArray(item.value) ? item.value[0] : item.value}
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>
     </Select>
   );
-};
+});
 
 export default SelectComponent;
