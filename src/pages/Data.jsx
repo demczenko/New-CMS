@@ -32,9 +32,9 @@ const Data = () => {
       <div className="flex justify-between items-center mb-6">
         <Heading title="Data" />
         <div className="space-x-2">
-          <Button className="md:" onClick={handleAddClick}>Add {activeTab}</Button>
+          <Button className="py-1 px-2 md:py-2 md:px-4 text-sm" onClick={handleAddClick}>Add {activeTab}</Button>
           {activeTab === "tabs" && (
-            <Button className="py-1 px-2 md:py-2 md:px-4" onClick={handleLinkTabsAndValuesClick}>
+            <Button className="py-1 px-2 md:py-2 md:px-4 text-sm" onClick={handleLinkTabsAndValuesClick}>
               Link tab and value
             </Button>
           )}
