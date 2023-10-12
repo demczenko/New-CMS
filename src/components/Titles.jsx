@@ -27,7 +27,10 @@ const TitleContent = ({ isFormOpen, setFormClose }) => {
     let valuesId = []
     for (const tab of tabs) {
       if (tab.data.length) {
-        valuesId.push(tab.data.find((item) => item.titleId === id).valueId)
+        let result = tab.data.find((item) => item.titleId === id);
+        if (result) {
+          valuesId.push(result.valueId)
+        }
       }
     }
     setTitles((prev) => prev.filter((elem) => elem.id !== id));
