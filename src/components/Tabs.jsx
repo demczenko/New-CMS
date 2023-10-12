@@ -18,7 +18,20 @@ const TabContent = ({
   const [tabs, setTabs] = useTab();
   const [titles, setTitles] = useTitle();
 
-  console.log(tabs);
+  const isTitleIdTakenToManyTabs = (titleId) => {
+    const tabsId = [];
+    tabs.forEach((item) => {
+      if (item.data.length) {
+        tabsId.push(item.data.find((elem) => elem.titleId === titleId));
+      }
+    });
+    
+    if (tabsId.length > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const handleAddTabForm = (tab_name) => {
     const newTab = {
@@ -79,6 +92,19 @@ const TabContent = ({
         return item;
       });
     });
+    if (isTitleIdTakenToManyTabs(titleId)) {
+      setTitles((prev) => {
+        return prev.map((item) => {
+          if (item.id === titleId) {
+            return {
+              ...item,
+              isSelectedOnEveryTab: true,
+            };
+          }
+          return item;
+        });
+      });
+    }
     setFormClose();
     setIsTabFormClose();
   };

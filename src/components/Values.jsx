@@ -70,6 +70,7 @@ const ValueContent = ({ isFormOpen, setFormClose }) => {
             return {
               ...item,
               isSelected: false,
+              isSelectedOnEveryTab: false,
             };
           }
           return item;
