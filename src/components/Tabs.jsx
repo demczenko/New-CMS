@@ -18,6 +18,8 @@ const TabContent = ({
   const [tabs, setTabs] = useTab();
   const [titles, setTitles] = useTitle();
 
+  console.log(tabs);
+
   const handleAddTabForm = (tab_name) => {
     const newTab = {
       id: uuidv4(),
@@ -59,7 +61,7 @@ const TabContent = ({
 
   const handleAddTabValueForm = (tab_id, titleId, valueId) => {
     markValueAsUsed(valueId);
-    markTitleAsUsed(titleId)
+    markTitleAsUsed(titleId);
     setTabs((prev) => {
       return prev.map((item) => {
         if (item.id === tab_id) {
@@ -157,10 +159,33 @@ const TabValueForm = ({ handleForm }) => {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
+  const isTabAlreadyHaveSelectedTitle = (tab_id, titleId) => {
+    for (const tab of tabs) {
+      if (tab.id === tab_id) {
+        if (tab.data.length) {
+          let result = tab.data.find((item) => item.titleId === titleId);
+          if (result !== undefined) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+  };
   const onSubmit = ({ tab_id, titleId, valueId }) => {
-    handleForm(tab_id, titleId, valueId);
+    if (isTabAlreadyHaveSelectedTitle(tab_id, titleId)) {
+      setError("titleId", {
+        message: "Title already taken by this tab.",
+      });
+    } else {
+      handleForm(tab_id, titleId, valueId);
+    }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -198,14 +223,16 @@ const TabValueForm = ({ handleForm }) => {
                   onValueChange={field.onChange}
                   className="col-span-1"
                   placeholder={"Select title"}
-                  items={titles}
+                  items={titles.filter(
+                    (value) => value.isSelectedOnEveryTab !== true
+                  )}
                 />
               );
             }}
           />
-          {errors.title_name && (
+          {errors.titleId && (
             <span className="text-red-300 text-sm">
-              {errors.title_name.message}
+              {errors.titleId.message}
             </span>
           )}
         </div>
@@ -225,9 +252,9 @@ const TabValueForm = ({ handleForm }) => {
               );
             }}
           />
-          {errors.value_name && (
+          {errors.valueId && (
             <span className="text-red-300 text-sm">
-              {errors.value_name.message}
+              {errors.valueId.message}
             </span>
           )}
         </div>

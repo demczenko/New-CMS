@@ -14,7 +14,7 @@ const SelectComponent = forwardRef(function SelectComponent(
 ) {
   return (
     <Select {...props} className="col-span-1">
-      <SelectTrigger ref={ref}>
+      <SelectTrigger className="truncate" ref={ref}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
