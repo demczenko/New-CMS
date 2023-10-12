@@ -25,8 +25,7 @@ const TabContent = ({
         tabsId.push(item.data.find((elem) => elem.titleId === titleId));
       }
     });
-    
-    if (tabsId.length > 1) {
+    if (tabsId.length >= 1) {
       return true;
     } else {
       return false;
@@ -249,9 +248,7 @@ const TabValueForm = ({ handleForm }) => {
                   onValueChange={field.onChange}
                   className="col-span-1"
                   placeholder={"Select title"}
-                  items={titles.filter(
-                    (value) => value.isSelectedOnEveryTab !== true
-                  )}
+                  items={titles}
                 />
               );
             }}
