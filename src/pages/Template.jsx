@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Css, Footer, Header, Heading, Main } from "../components";
+import { Footer, Header, Heading, Main } from "../components";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs";
+import { useFooter, useHeader, useMain } from "../hooks";
 import { Button } from "../components/ui/button";
 
 const Template = () => {
-  const [activeTab, setActiveTab] = useState("template");
+  const [mainHtml, setMainHtml] = useMain();
+  const [footerHtml, setFooterHtml] = useFooter();
+  const [headerHtml, setHeaderHtml] = useHeader();
+
+  const [activeTab, setActiveTab] = useState("main");
   const [isFormOpen, setFormOpen] = useState(false);
 
   const handleAddClick = () => {
@@ -25,11 +30,39 @@ const Template = () => {
       <div className="flex justify-between items-center mb-6">
         <Heading title="Template" />
         <div className="space-x-2">
-          <Button
-            className="py-1 px-2 md:py-2 md:px-4 text-sm"
-            onClick={handleAddClick}>
-            Add {activeTab}
-          </Button>
+          {activeTab === "main" && (
+            <>
+              {!(mainHtml.length > 0) && (
+                <Button
+                  className="py-1 px-2 md:py-2 md:px-4 text-sm"
+                  onClick={handleAddClick}>
+                  Add {activeTab}
+                </Button>
+              )}
+            </>
+          )}
+          {activeTab === "header" && (
+            <>
+              {!(headerHtml.length > 0) && (
+                <Button
+                  className="py-1 px-2 md:py-2 md:px-4 text-sm"
+                  onClick={handleAddClick}>
+                  Add {activeTab}
+                </Button>
+              )}
+            </>
+          )}
+          {activeTab === "footer" && (
+            <>
+              {!(footerHtml.length > 0) && (
+                <Button
+                  className="py-1 px-2 md:py-2 md:px-4 text-sm"
+                  onClick={handleAddClick}>
+                  Add {activeTab}
+                </Button>
+              )}
+            </>
+          )}
         </div>
       </div>
       <Tabs defaultValue="main" className="w-full">
@@ -52,24 +85,24 @@ const Template = () => {
             value="footer">
             Footer
           </TabsTrigger>
-          <TabsTrigger
-            onClick={() => handleActiveTab("css")}
-            className="w-full"
-            value="css">
-            Css
-          </TabsTrigger>
         </TabsList>
         <TabsContent value="main">
-          <Main />
+          <Main
+            isFormOpen={isFormOpen}
+            setFormClose={() => setFormOpen(false)}
+          />
         </TabsContent>
         <TabsContent value="header">
-          <Header />
+          <Header
+            isFormOpen={isFormOpen}
+            setFormClose={() => setFormOpen(false)}
+          />
         </TabsContent>
         <TabsContent value="footer">
-          <Footer />
-        </TabsContent>
-        <TabsContent value="css">
-          <Css />
+          <Footer
+            isFormOpen={isFormOpen}
+            setFormClose={() => setFormOpen(false)}
+          />
         </TabsContent>
       </Tabs>
     </section>

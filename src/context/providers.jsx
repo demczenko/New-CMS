@@ -1,4 +1,3 @@
-import { CssContextProvider } from "./cssProvider";
 import { FooterContextProvider } from "./footerProvider";
 import { HeaderContextProvider } from "./headerProvider";
 import { MainContextProvider } from "./mainProvider";
@@ -8,18 +7,16 @@ import { ValueContextProvider } from "./valueProvider";
 
 export const Providers = ({ children }) => {
   return (
-    <TabContextProvider>
-      <TitleContextProvider>
-        <ValueContextProvider>
-          <MainContextProvider>
-            <HeaderContextProvider>
-              <FooterContextProvider>
-                <CssContextProvider>{children}</CssContextProvider>
-              </FooterContextProvider>
-            </HeaderContextProvider>
-          </MainContextProvider>
-        </ValueContextProvider>
-      </TitleContextProvider>
-    </TabContextProvider>
+    <MainContextProvider>
+      <HeaderContextProvider>
+        <FooterContextProvider>
+          <TabContextProvider>
+            <TitleContextProvider>
+              <ValueContextProvider>{children}</ValueContextProvider>
+            </TitleContextProvider>
+          </TabContextProvider>
+        </FooterContextProvider>
+      </HeaderContextProvider>
+    </MainContextProvider>
   );
 };

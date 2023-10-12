@@ -15,11 +15,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "template",
-        element: (
-          <RouterGuard>
-            <Template />
-          </RouterGuard>
-        ),
+        element: <Template />,
       },
       {
         path: "render",

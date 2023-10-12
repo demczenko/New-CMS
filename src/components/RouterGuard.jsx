@@ -43,6 +43,7 @@ const TemplateRouterGuard = ({ children }) => {
     if (!titles.length) {
       navigate("/data");
     }
+
     let result;
     titles.forEach(tab => {
       result = isEveryTabWithTheSameTitleIdHasTheSameValueLength(tab.id)
@@ -50,8 +51,11 @@ const TemplateRouterGuard = ({ children }) => {
     if (!result) {
       navigate("/data");
     }
-    if (!isEveryTitleHasBeenAddedToEveryTab()) {
-      navigate("/data");
+    
+    if (titles.lengt >= 1) {
+      if (!isEveryTitleHasBeenAddedToEveryTab()) {
+        navigate("/data");
+      }
     }
   }, []);
   return <>{children}</>;
