@@ -1,0 +1,1 @@
+export const HREF_TAGS = ["a", "area", "base", "link"];

@@ -219,6 +219,9 @@ const TabValueForm = ({ handleForm }) => {
           <Controller
             control={control}
             name="tab_id"
+            rules={{
+              required: true,
+            }}
             render={({ field }) => {
               return (
                 <SelectComponent
@@ -241,6 +244,9 @@ const TabValueForm = ({ handleForm }) => {
           <Controller
             control={control}
             name="titleId"
+            rules={{
+              required: true,
+            }}
             render={({ field }) => {
               return (
                 <SelectComponent
@@ -262,6 +268,9 @@ const TabValueForm = ({ handleForm }) => {
         <div>
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             name="valueId"
             render={({ field }) => {
               return (

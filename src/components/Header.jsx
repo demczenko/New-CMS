@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { useHeader, useMain, useTab } from "../hooks";
+import { useHeader, useTab } from "../hooks";
 import { v4 as uuidv4 } from "uuid";
 import { List, SelectComponent } from ".";
 import { Input } from "./ui/input";
@@ -12,6 +12,7 @@ const Header = ({
   setFormClose,
   setIsTabFormClose,
 }) => {
+  const [tabs, setTabs] = useTab();
   const [headers, setHtml] = useHeader();
   const handleForm = ({ html, header_name }) => {
     const newHeader = {
@@ -24,8 +25,33 @@ const Header = ({
     setFormClose();
   };
 
-  const handleAddTabValueForm = (tab_id) => {
-    console.log(tab_id);
+  const markHeaderAsUsed = (header_id) => {
+    setHtml((prev) => {
+      return prev.map((value) => {
+        if (value.id === header_id) {
+          return {
+            ...value,
+            isSelected: true,
+          };
+        }
+        return value;
+      });
+    });
+  };
+
+  const handleAddTabValueForm = (tab_id, header_id) => {
+    markHeaderAsUsed(header_id)
+    setTabs((prev) => {
+      return prev.map((item) => {
+        if (item.id === tab_id) {
+          return {
+            ...item,
+            header_id
+          };
+        }
+        return item;
+      });
+    });
     setFormClose();
     setIsTabFormClose();
   };
@@ -109,22 +135,26 @@ const HeaderForm = ({ handleForm }) => {
 
 const TabHeaderForm = ({ handleForm }) => {
   const [tabs, setTabs] = useTab();
-  const [mains, setMains] = useMain();
+  const [headers, setHtml] = useHeader();
+
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = ({ tab_id, main_id }) => {
-    handleForm(tab_id, main_id);
+  const onSubmit = ({ tab_id, header_id}) => {
+    handleForm(tab_id, header_id);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="p-1 grid grid-cols-4 gap-x-2">
+      <div className="p-1 grid grid-cols-4 gap-2">
         <div className="md:col-span-1 col-span-2">
           <Controller
             control={control}
             name="tab_id"
+            rules={{
+              required: true
+            }}
             render={({ field }) => {
               return (
                 <SelectComponent
@@ -146,25 +176,28 @@ const TabHeaderForm = ({ handleForm }) => {
         <div className="md:col-span-1 col-span-2">
           <Controller
             control={control}
-            name="main_id"
+            rules={{
+              required: true
+            }}
+            name="header_id"
             render={({ field }) => {
               return (
                 <SelectComponent
                   {...field}
                   onValueChange={field.onChange}
-                  placeholder={"Select main template..."}
-                  items={mains}
+                  placeholder={"Select header..."}
+                  items={headers.filter((value) => value.isSelected !== true)}
                 />
               );
             }}
           />
-          {errors.main_id && (
+          {errors.header_id && (
             <span className="text-red-300 text-sm">
-              {errors.main_id.message}
+              {errors.header_id.message}
             </span>
           )}
         </div>
-        <Button className="md:col-span-2 col-span-4 md:mt-0 mt-2" type="submit">Save</Button>
+        <Button className="md:col-span-1 col-span-4" type="submit">Save</Button>
       </div>
     </form>
   );

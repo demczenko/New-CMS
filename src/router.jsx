@@ -19,7 +19,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "render",
-        element: <Render />,
+        element: <RouterGuard><Render /></RouterGuard>,
       },
     ],
   },

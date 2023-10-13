@@ -16,7 +16,6 @@ const Main = ({
   const handleForm = ({ html, main_name }) => {
     const newMain = {
       id: uuidv4(),
-      isSelected: false,
       html: html,
       value: main_name,
     };
@@ -124,6 +123,9 @@ const TabMainForm = ({ handleForm }) => {
         <div>
           <Controller
             control={control}
+            rules={{
+              required: true
+            }}
             name="tab_id"
             render={({ field }) => {
               return (

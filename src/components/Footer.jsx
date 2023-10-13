@@ -1,4 +1,4 @@
-import { useFooter, useMain, useTab } from "../hooks";
+import { useFooter, useTab } from "../hooks";
 import { Controller, useForm } from "react-hook-form";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
@@ -13,6 +13,7 @@ const Footer = ({
   setIsTabFormClose,
 }) => {
   const [footers, setHtml] = useFooter();
+  const [tabs, setTabs] = useTab();
   const handleForm = ({ html, footer_name }) => {
     const newFooter = {
       id: uuidv4(),
@@ -23,11 +24,41 @@ const Footer = ({
     setHtml((prev) => [...prev, newFooter]);
     setFormClose();
   };
-  const handleAddTabValueForm = (tab_id) => {
-    console.log(tab_id);
+
+  console.log(tabs);
+
+  const markFooterAsUsed = (footer_id) => {
+    setHtml((prev) => {
+      return prev.map((value) => {
+        if (value.id === footer_id) {
+          return {
+            ...value,
+            isSelected: true,
+          };
+        }
+        return value;
+      });
+    });
+  };
+
+  const handleAddTabValueForm = (tab_id, footer_id) => {
+    markFooterAsUsed(footer_id)
+    setTabs((prev) => {
+      return prev.map((item) => {
+        if (item.id === tab_id) {
+          return {
+            ...item,
+            footer_id
+          };
+        }
+        return item;
+      });
+    });
     setFormClose();
     setIsTabFormClose();
   };
+
+
 
   const handleDelete = () => {};
 
@@ -109,23 +140,26 @@ const FooterForm = ({ handleForm }) => {
 
 const TabFooterForm = ({ handleForm }) => {
   const [tabs, setTabs] = useTab();
-  const [mains, setMains] = useMain();
+  const [footers, setHtml] = useFooter();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = ({ tab_id, main_id }) => {
-    handleForm(tab_id, main_id);
+  const onSubmit = ({ tab_id, footer_id }) => {
+    handleForm(tab_id, footer_id);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="p-1 grid grid-cols-4 gap-x-2">
+      <div className="p-1 grid grid-cols-4 gap-2">
         <div className="md:col-span-1 col-span-2">
           <Controller
             control={control}
             name="tab_id"
+            rules={{
+              required: true
+            }}
             render={({ field }) => {
               return (
                 <SelectComponent
@@ -146,25 +180,28 @@ const TabFooterForm = ({ handleForm }) => {
         <div className="md:col-span-1 col-span-2">
           <Controller
             control={control}
-            name="main_id"
+            name="footer_id"
+            rules={{
+              required: true
+            }}
             render={({ field }) => {
               return (
                 <SelectComponent
                   {...field}
                   onValueChange={field.onChange}
-                  placeholder={"Select main template..."}
-                  items={mains}
+                  placeholder={"Select footer..."}
+                  items={footers.filter((value) => value.isSelected !== true)}
                 />
               );
             }}
           />
-          {errors.main_id && (
+          {errors.footer_id && (
             <span className="text-red-300 text-sm">
-              {errors.main_id.message}
+              {errors.footer_id.message}
             </span>
           )}
         </div>
-        <Button className="md:col-span-2 col-span-4 md:mt-0 mt-2">Save</Button>
+        <Button className="md:col-span-1 col-span-4">Save</Button>
       </div>
     </form>
   );

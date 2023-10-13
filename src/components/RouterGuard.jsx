@@ -3,12 +3,28 @@ import { useTitle } from "../hooks/useTitle";
 import React, { useEffect } from "react";
 import { useTab } from "../hooks/useTab";
 import { useValue } from "../hooks/useValue";
+import { useFooter, useHeader } from "../hooks";
 
 const TemplateRouterGuard = ({ children }) => {
   const [titles, setTItle] = useTitle();
   const [tabs, setTabs] = useTab();
   const [values, setValues] = useValue();
+
+  const [headers, setHeader] = useHeader();
+  const [footers, setFooter] = useFooter();
+
   const navigate = useNavigate();
+
+  const isEveryFooterAndHeaderSelected = () => {
+    const isEveryFootersSelected = headers.map((item) => item.isSelected).every((item) => item === true);
+    const isEveryHeaderSelected = footers.map((item) => item.isSelected).every((item) => item === true);
+
+    if (isEveryFootersSelected && isEveryHeaderSelected) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   const isEveryTitleHasBeenAddedToEveryTab = () => {
     let result = titles
@@ -40,8 +56,13 @@ const TemplateRouterGuard = ({ children }) => {
   };
 
   useEffect(() => {
+
     if (!titles.length) {
       navigate("/data");
+    }
+
+    if (!isEveryFooterAndHeaderSelected()) {
+      navigate("/template");
     }
 
     let result;
