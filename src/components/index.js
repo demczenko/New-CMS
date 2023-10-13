@@ -10,8 +10,14 @@ import Main from "./Main";
 import Header from "./Header";
 import Footer from "./Footer";
 import HeaderActions from "./HeaderActions";
+import RenderArea from "./RenderArea";
+import RenderHeading from "./RenderHeading";
+import TemplateNotFound from "./TemplateNotFound";
 
 export {
+  TemplateNotFound,
+  RenderArea,
+  RenderHeading,
   HeaderActions,
   Main,
   Header,

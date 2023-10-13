@@ -1,7 +1,7 @@
 import { Data, ErrorPage, Render, Template } from "./pages/index.js";
 import App from "./App.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { RouterGuard } from "./components/index.js";
+import { RenderArea, RenderHeading, RouterGuard } from "./components/index.js";
 
 const routes = createBrowserRouter([
   {
@@ -15,11 +15,23 @@ const routes = createBrowserRouter([
       },
       {
         path: "template",
-        element: <Template />,
+        element: (
+          <RouterGuard>
+            <Template />
+          </RouterGuard>
+        ),
       },
       {
         path: "render",
-        element: <RouterGuard><Render /></RouterGuard>,
+        element: (
+          <RouterGuard>
+            <RenderArea>
+              <RenderHeading />
+              <hr />
+              <Render />
+            </RenderArea>
+          </RouterGuard>
+        ),
       },
     ],
   },

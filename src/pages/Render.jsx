@@ -1,170 +1,226 @@
-import React, { useEffect } from "react";
-import { Heading } from "../components";
+import React, { useEffect, useRef, useState } from "react";
+import { Heading, TemplateNotFound } from "../components";
 import { SRC_TAGS } from "../constance/SRC_TAGS";
 import { HREF_TAGS } from "../constance/HREF_TAGS";
+import { useRenderArea } from "../components/RenderArea";
+import { useFooter, useHeader, useMain, useTab } from "../hooks";
 
 const Render = () => {
-  const { id, type } = selectedData;
-  const { key } = selectedKey;
-  const isAlreadySwapped = targets.find((item) => item.target === node);
+  const [tabs, setTabs] = useTab();
+  const [main, setMain] = useMain();
+  const [headers, setHeader] = useHeader();
+  const [footers, setFooter] = useFooter();
 
-  const handleHrefAttribute = () => {
-    if (!HREF_TAGS.includes(node.nodeName.toLowerCase())) {
-      toast({
-        variant: "destructive",
-        title: `Sorry, but i can't change href attribute for ${node.nodeName} tag.`,
-      });
-      return false;
+  const [selectedTemplate, setSelectedTemplate] = useRenderArea();
+
+  if (!main.length) {
+    return null
+  }
+
+  const mainHtmlTemplateToRender = main.find(
+    (template) => template.id === selectedTemplate.main_id
+  );
+  if (mainHtmlTemplateToRender === undefined) {
+    return <TemplateNotFound />;
+  }
+
+  const selectedTab = tabs.find(
+    (tab) => tab.id === selectedTemplate.tab_id
+  );
+
+  let headerHtmlTemplateToRender;
+  let footerHtmlTemplateToRender;
+  if (selectedTab.hasOwnProperty('footer_id')) {
+    footerHtmlTemplateToRender = footers.find(
+      (footer) => footer.id === selectedTab.footer_id
+    );
+  }
+
+  if (selectedTab.hasOwnProperty('header_id')) {
+    headerHtmlTemplateToRender = headers.find(
+      (header) => header.id === selectedTab.header_id
+    );
+  }
+  const getTemplateToRender = () => {
+    if (!headerHtmlTemplateToRender && !footerHtmlTemplateToRender) {
+      return mainHtmlTemplateToRender.html
     }
-    return true;
-  };
-
-  const handleSrcAttribute = () => {
-    if (!SRC_TAGS.includes(node.nodeName.toLowerCase())) {
-      toast({
-        variant: "destructive",
-        title: `Sorry, but i can't change src attribute for ${node.nodeName} tag.`,
-      });
-      return false;
+    if (headerHtmlTemplateToRender && footerHtmlTemplateToRender) {
+      return headerHtmlTemplateToRender.html + mainHtmlTemplateToRender.html + footerHtmlTemplateToRender.html
     }
-    return true;
-  };
 
-  useEffect(() => {
-    if (node && type) {
-      if (isAlreadySwapped === undefined) {
-        if (type === "link") {
-          if (!handleHrefAttribute()) {
-            return;
-          }
-        }
-
-        if (type === "image") {
-          if (!handleSrcAttribute()) {
-            return;
-          }
-        }
-
-        setTargets((prev) => [
-          ...prev,
-          { index: id, type: type, target: node },
-        ]);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Node is already taken.",
-          description: `This node is already taken by ${isAlreadySwapped.type} index ${isAlreadySwapped.index}. You want overwrite linked data?`,
-          action: (
-            <>
-              <ToastAction
-                onClick={() => {
-                  if (type === "link") {
-                    if (handleHrefAttribute()) {
-                      return;
-                    }
-                  }
-
-                  if (type === "image") {
-                    if (!handleSrcAttribute()) {
-                      return;
-                    }
-                  }
-                  setTargets((prev) => {
-                    return prev.map((item) => {
-                      if (item.target === node) {
-                        return {
-                          index: id,
-                          type: type,
-                          target: node,
-                        };
-                      }
-                      return item;
-                    });
-                  });
-                }}
-                altText="Swap">
-                Confirm
-              </ToastAction>
-              <ToastAction
-                onClick={() => {
-                  setNode(null);
-                  setIdx({ id: "", type: "" });
-                  dismiss();
-                }}
-                altText="Try again">
-                Cancel
-              </ToastAction>
-            </>
-          ),
-        });
-      }
+    if (headerHtmlTemplateToRender) {
+      return headerHtmlTemplateToRender.html + mainHtmlTemplateToRender.html
     }
-  }, [id, type, node]);
 
-  useEffect(() => {
-    setNode(null);
-    setIdx({ id: "", type: "" });
-    for (const key in targets) {
-      const node = targets[key];
-
-      if (node.type === "text_node") {
-        const selectedItemData = selectedKey.data.find(
-          (item) => item.type === "text_node"
-        )["text_node"];
-        node.target.textContent = selectedItemData[node.index];
-      }
-
-      if (node.type === "href") {
-        const selectedItemData = selectedKey.data.find(
-          (item) => item.type === "href"
-        )["href"];
-        node.target.href = selectedItemData[node.index];
-      }
-
-      if (node.type === "src") {
-        const { file_type, server, value } = images[node.index];
-        const selectedItemData = selectedKey.data.find(
-          (item) => item.type === "src"
-        )["src"];
-        // const link = server + country.toLowerCase() + value + file_type;
-        // node.target.src = link;
-      }
+    if (footerHtmlTemplateToRender) {
+      return mainHtmlTemplateToRender.html + footerHtmlTemplateToRender.html
     }
-  }, [targets, key]);
+  }
 
-  useEffect(() => {
-    if (!ref.current) return;
+  // const ref = useRef(null);
+  // const [node, setNode] = useState();
+  // const [targets, setTargets] = useState([]);
+  // const [selectedData, setSelectedData] = useState({ id: 1, type: 'href' });
+  // const { id, type } = selectedData;
+  // const isAlreadySwapped = targets.find((item) => item.target === node);
 
-    function handleNodeClick(ev) {
-      if (!type) {
-        toast({
-          variant: "destructive",
-          title: "Firstly select data then place.",
-        });
-      }
+  // const handleHrefAttribute = () => {
+  //   if (!HREF_TAGS.includes(node.nodeName.toLowerCase())) {
+  //     toast({
+  //       variant: "destructive",
+  //       title: `Sorry, but i can't change href attribute for ${node.nodeName} tag.`,
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
-      ev.preventDefault();
-      if (type === "href") {
-        const aTag = ev.target.parentNode;
-        setNode(aTag);
-      } else {
-        setNode(ev.target);
-      }
-    }
-    ref.current.addEventListener("click", handleNodeClick);
-    return () => {
-      if (!ref.current) return;
-      ref.current.removeEventListener("click", handleNodeClick);
-    };
-  }, [id, type]);
+  // const handleSrcAttribute = () => {
+  //   if (!SRC_TAGS.includes(node.nodeName.toLowerCase())) {
+  //     toast({
+  //       variant: "destructive",
+  //       title: `Sorry, but i can't change src attribute for ${node.nodeName} tag.`,
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // };
+
+  // useEffect(() => {
+  //   if (node && type) {
+  //     if (isAlreadySwapped === undefined) {
+  //       if (type === "link") {
+  //         if (!handleHrefAttribute()) {
+  //           return;
+  //         }
+  //       }
+
+  //       if (type === "image") {
+  //         if (!handleSrcAttribute()) {
+  //           return;
+  //         }
+  //       }
+
+  //       setTargets((prev) => [
+  //         ...prev,
+  //         { index: id, type: type, target: node },
+  //       ]);
+  //     } else {
+  //       toast({
+  //         variant: "destructive",
+  //         title: "Node is already taken.",
+  //         description: `This node is already taken by ${isAlreadySwapped.type} index ${isAlreadySwapped.index}. You want overwrite linked data?`,
+  //         action: (
+  //           <>
+  //             <ToastAction
+  //               onClick={() => {
+  //                 if (type === "link") {
+  //                   if (handleHrefAttribute()) {
+  //                     return;
+  //                   }
+  //                 }
+
+  //                 if (type === "image") {
+  //                   if (!handleSrcAttribute()) {
+  //                     return;
+  //                   }
+  //                 }
+  //                 setTargets((prev) => {
+  //                   return prev.map((item) => {
+  //                     if (item.target === node) {
+  //                       return {
+  //                         index: id,
+  //                         type: type,
+  //                         target: node,
+  //                       };
+  //                     }
+  //                     return item;
+  //                   });
+  //                 });
+  //               }}
+  //               altText="Swap">
+  //               Confirm
+  //             </ToastAction>
+  //             <ToastAction
+  //               onClick={() => {
+  //                 setNode(null);
+  //                 setSelectedData({ id: "", type: "" });
+  //                 dismiss();
+  //               }}
+  //               altText="Try again">
+  //               Cancel
+  //             </ToastAction>
+  //           </>
+  //         ),
+  //       });
+  //     }
+  //   }
+  // }, [id, type, node]);
+
+  // useEffect(() => {
+  //   setNode(null);
+  //   setSelectedData({ id: "", type: "" });
+  //   for (const key in targets) {
+  //     const node = targets[key];
+
+  //     if (node.type === "text_node") {
+  //       const selectedItemData = selectedKey.data.find(
+  //         (item) => item.type === "text_node"
+  //       )["text_node"];
+  //       node.target.textContent = selectedItemData[node.index];
+  //     }
+
+  //     if (node.type === "href") {
+  //       const selectedItemData = selectedKey.data.find(
+  //         (item) => item.type === "href"
+  //       )["href"];
+  //       node.target.href = selectedItemData[node.index];
+  //     }
+
+  //     if (node.type === "src") {
+  //       const { file_type, server, value } = images[node.index];
+  //       const selectedItemData = selectedKey.data.find(
+  //         (item) => item.type === "src"
+  //       )["src"];
+  //       // const link = server + country.toLowerCase() + value + file_type;
+  //       // node.target.src = link;
+  //     }
+  //   }
+  // }, [targets, selectedTemplate]);
+
+  // useEffect(() => {
+  //   if (!ref.current) return;
+
+  //   function handleNodeClick(ev) {
+  //     if (!type) {
+  //       toast({
+  //         variant: "destructive",
+  //         title: "Firstly select data then place.",
+  //       });
+  //     }
+
+  //     ev.preventDefault();
+  //     if (type === "href") {
+  //       const aTag = ev.target.parentNode;
+  //       setNode(aTag);
+  //     } else {
+  //       setNode(ev.target);
+  //     }
+  //   }
+  //   ref.current.addEventListener("click", handleNodeClick);
+  //   return () => {
+  //     if (!ref.current) return;
+  //     ref.current.removeEventListener("click", handleNodeClick);
+  //   };
+  // }, [id, type]);
+
   return (
     <section>
-      <Heading title="Render" />
       <div
-        className="bg-gray-300 overflow-y-auto -mt-16"
-        ref={ref}
+        className="bg-gray-200"
         dangerouslySetInnerHTML={{
-          __html: "",
+          __html: getTemplateToRender(),
         }}
       />
     </section>

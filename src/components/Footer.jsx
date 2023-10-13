@@ -201,7 +201,7 @@ const TabFooterForm = ({ handleForm }) => {
             </span>
           )}
         </div>
-        <Button className="md:col-span-1 col-span-4">Save</Button>
+        <Button className="md:col-span-1 col-span-4" type="submit">Save</Button>
       </div>
     </form>
   );
