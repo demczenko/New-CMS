@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { Badge } from "./ui/badge";
 
 const List = ({ items, title, subtitle, handleDelete }) => {
   if (!items.length) return null;
@@ -22,7 +23,7 @@ const List = ({ items, title, subtitle, handleDelete }) => {
   return (
     <div className="mt-6">
       {title && <Heading title={title} subtitle={subtitle} />}
-      <ul className="space-y-2 mt-4">
+      <ul className="space-y-6 mt-4">
         {items.map((item) => (
           <div key={item.id}>
             <li className="font-semibold text-base md:text-xl relative bg-slate-100 p-4 rounded-md capitalize pr-24 mb-2">
@@ -38,7 +39,7 @@ const List = ({ items, title, subtitle, handleDelete }) => {
                     <DialogHeader>
                       <DialogTitle>Delete item</DialogTitle>
                       <DialogDescription>
-                        Make sure that item is not connected to any tab. <br/>
+                        Make sure that item is not connected to any tab. <br />
                         All tabs will be affected by this action.
                       </DialogDescription>
                     </DialogHeader>
@@ -64,6 +65,13 @@ const List = ({ items, title, subtitle, handleDelete }) => {
                   </DialogContent>
                 </Dialog>
               )}
+              <div className="absolute left-2">
+                {item.hasOwnProperty("isSelected")  && (
+                  <Badge className="md:text-sm bg-slate-200 text-black dark:text-white hover:text-white text-xs">
+                    <>{item.isSelected ? "Selected" : "Not selected"}</>
+                  </Badge>
+                )}
+              </div>
             </li>
             {item?.data?.length > 0 && (
               <details className="pb-4">

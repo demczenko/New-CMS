@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Footer, Header, Heading, Main } from "../components";
+import { Footer, Header, HeaderActions, Heading, Main } from "../components";
 import {
   Tabs,
   TabsContent,
@@ -7,7 +7,6 @@ import {
   TabsTrigger,
 } from "../components/ui/tabs";
 import { useFooter, useHeader, useMain } from "../hooks";
-import { Button } from "../components/ui/button";
 
 const Template = () => {
   const [mainHtml, setMainHtml] = useMain();
@@ -16,54 +15,26 @@ const Template = () => {
 
   const [activeTab, setActiveTab] = useState("main");
   const [isFormOpen, setFormOpen] = useState(false);
+  const [isTabFormOpen, setIsTabFormOpen] = useState(false);
 
   const handleAddClick = () => {
     setFormOpen(!isFormOpen);
   };
 
+  const handleLinkTabsAndValuesClick = () => {
+    setIsTabFormOpen(!isTabFormOpen);
+  };
+
   const handleActiveTab = (tab) => {
     setActiveTab(tab);
     setFormOpen(false);
+    setIsTabFormOpen(false);
   };
   return (
     <section>
       <div className="flex justify-between items-center mb-6">
-        <Heading title="Template" />
-        <div className="space-x-2">
-          {activeTab === "main" && (
-            <>
-              {!(mainHtml.length > 0) && (
-                <Button
-                  className="py-1 px-2 md:py-2 md:px-4 text-sm"
-                  onClick={handleAddClick}>
-                  Add {activeTab}
-                </Button>
-              )}
-            </>
-          )}
-          {activeTab === "header" && (
-            <>
-              {!(headerHtml.length > 0) && (
-                <Button
-                  className="py-1 px-2 md:py-2 md:px-4 text-sm"
-                  onClick={handleAddClick}>
-                  Add {activeTab}
-                </Button>
-              )}
-            </>
-          )}
-          {activeTab === "footer" && (
-            <>
-              {!(footerHtml.length > 0) && (
-                <Button
-                  className="py-1 px-2 md:py-2 md:px-4 text-sm"
-                  onClick={handleAddClick}>
-                  Add {activeTab}
-                </Button>
-              )}
-            </>
-          )}
-        </div>
+        <Heading title="Templates" />
+        <HeaderActions activeTab={activeTab} handleLinkTabsAndValuesClick={handleLinkTabsAndValuesClick} handleAddClick={handleAddClick}/>
       </div>
       <Tabs defaultValue="main" className="w-full">
         <TabsList className="w-full">
@@ -88,20 +59,26 @@ const Template = () => {
         </TabsList>
         <TabsContent value="main">
           <Main
+            isTabFormOpen={isTabFormOpen}
             isFormOpen={isFormOpen}
             setFormClose={() => setFormOpen(false)}
+            setIsTabFormClose={() => setIsTabFormOpen(false)}
           />
         </TabsContent>
         <TabsContent value="header">
           <Header
+            isTabFormOpen={isTabFormOpen}
             isFormOpen={isFormOpen}
             setFormClose={() => setFormOpen(false)}
+            setIsTabFormClose={() => setIsTabFormOpen(false)}
           />
         </TabsContent>
         <TabsContent value="footer">
           <Footer
+            isTabFormOpen={isTabFormOpen}
             isFormOpen={isFormOpen}
             setFormClose={() => setFormOpen(false)}
+            setIsTabFormClose={() => setIsTabFormOpen(false)}
           />
         </TabsContent>
       </Tabs>

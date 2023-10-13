@@ -1,74 +1,57 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useMain } from "../hooks";
+import { Controller, useForm } from "react-hook-form";
+import { useMain, useTab } from "../hooks";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { Heading } from ".";
+import { List, SelectComponent } from ".";
+import { Input } from "./ui/input";
+import { v4 as uuidv4 } from "uuid";
 
-const Main = ({ isFormOpen, setFormClose }) => {
-  const [html, setHtml] = useMain();
-  const handleForm = ({ html }) => {
-    setHtml(html);
+const Main = ({
+  isFormOpen,
+  isTabFormOpen,
+  setFormClose,
+  setIsTabFormClose,
+}) => {
+  const [mains, setHtml] = useMain();
+  const handleForm = ({ html, main_name }) => {
+    const newMain = {
+      id: uuidv4(),
+      isSelected: false,
+      html: html,
+      value: main_name,
+    };
+    setHtml((prev) => [...prev, newMain]);
     setFormClose();
   };
+
+  const handleAddTabValueForm = (tab_id) => {
+    console.log(tab_id);
+    setFormClose();
+    setIsTabFormClose();
+  };
+
+  const handleDelete = () => {};
 
   return (
     <div>
       {isFormOpen && <MainForm handleForm={handleForm} />}
-      {html.length > 0 && <ManageTemplate template={html} />}
+      {isTabFormOpen && <TabMainForm handleForm={handleAddTabValueForm} />}
+      <List
+        handleDelete={handleDelete}
+        items={mains}
+        title="Main templates"
+        subtitle={"Manage created main templates."}
+      />
     </div>
   );
 };
 
-const ManageTemplate = ({ template }) => {
-  const [, setHtml] = useMain();
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const handleEditClick = () => {
-    setIsEditOpen(true);
-  };
-
-  const handleSaveClick = ({ html }) => {
-    setHtml(html);
-    setIsEditOpen();
-  };
-
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <Heading
-          title={"Main template"}
-          subtitle={"Manage main html document."}
-        />
-        <div className="space-x-2">
-          <Button
-            className="py-1 px-2 md:py-2 md:px-4 text-sm"
-            onClick={handleEditClick}>
-            Edit main document
-          </Button>
-        </div>
-      </div>
-      {isEditOpen ? (
-        <MainForm html={template} handleForm={handleSaveClick} />
-      ) : (
-        <div
-          className="max-h-[600px] md:max-h-[800px] overflow-auto max-w-full md:max-w-[50%]"
-          dangerouslySetInnerHTML={{ __html: template }}
-        />
-      )}
-    </div>
-  );
-};
-
-const MainForm = ({ html, handleForm }) => {
+const MainForm = ({ handleForm }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      html: html && html,
-    },
-  });
+  } = useForm();
 
   const onSubmit = (data) => {
     handleForm(data);
@@ -77,24 +60,87 @@ const MainForm = ({ html, handleForm }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-1 grid grid-cols-4 gap-x-2">
-        <div className="col-span-3">
-          <Textarea
-            rows={30}
-            placeholder="Enter html template..."
-            className="max-h-[800px]"
-            {...register("html", {
+        <div className="col-span-1">
+          <Input
+            placeholder="Enter main template name..."
+            {...register("main_name", {
               required: {
                 value: true,
-                message: "Value is required.",
+                message: "Header name is required.",
+              },
+              maxLength: {
+                value: 16,
+                message: "Maximum length is 16 symbols",
               },
               minLength: {
-                value: 10,
-                message: "Minimum length is 10 symbols",
+                value: 2,
+                message: "Minimum length is 2 symbols",
               },
             })}
           />
-          {errors.html && (
-            <span className="text-red-300 text-sm">{errors.html.message}</span>
+          {errors.main_name && (
+            <span className="text-red-300 text-sm">
+              {errors.main_name.message}
+            </span>
+          )}
+        </div>
+        <Textarea
+          rows={30}
+          placeholder="Enter main html template..."
+          className="max-h-[800px] col-span-2"
+          {...register("html", {
+            required: {
+              value: true,
+              message: "Value is required.",
+            },
+            minLength: {
+              value: 10,
+              message: "Minimum length is 10 symbols",
+            },
+          })}
+        />
+        {errors.html && (
+          <span className="text-red-300 text-sm">{errors.html.message}</span>
+        )}
+        <Button type="submit">Save</Button>
+      </div>
+    </form>
+  );
+};
+
+const TabMainForm = ({ handleForm }) => {
+  const [tabs, setTabs] = useTab();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = ({ tab_id }) => {
+    handleForm(tab_id);
+  };
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="p-1 grid grid-cols-4 gap-x-2">
+        <div>
+          <Controller
+            control={control}
+            name="tab_id"
+            render={({ field }) => {
+              return (
+                <SelectComponent
+                  {...field}
+                  onValueChange={field.onChange}
+                  className="col-span-1"
+                  placeholder={"Select tab"}
+                  items={tabs}
+                />
+              );
+            }}
+          />
+          {errors.tab_id && (
+            <span className="text-red-300 text-sm">
+              {errors.tab_id.message}
+            </span>
           )}
         </div>
         <Button type="submit">Save</Button>

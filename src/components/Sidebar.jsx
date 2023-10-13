@@ -5,7 +5,7 @@ const Sidebar = () => {
     <nav>
       <ul className="space-y-2">
         <SidebarItem title="Data" to={'data'} />
-        <SidebarItem title="Template" to={'template'} />
+        <SidebarItem title="Templates" to={'template'} />
         <SidebarItem title="Render" to={'render'} />
       </ul>
     </nav>
