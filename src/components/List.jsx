@@ -14,11 +14,11 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Badge } from "./ui/badge";
+import { ListTabs, ListValues } from "./ListItems";
 
 const List = ({ items, title, subtitle, handleDelete }) => {
   if (!items.length) return null;
-  const [values, setValues] = useValue();
-  const [titles, setTitles] = useTitle();
+
 
   return (
     <div className="mt-6">
@@ -66,50 +66,15 @@ const List = ({ items, title, subtitle, handleDelete }) => {
                 </Dialog>
               )}
               <div className="absolute left-2">
-                {item.hasOwnProperty("isSelected")  && (
+                {item.hasOwnProperty("isSelected") && (
                   <Badge className="md:text-sm bg-slate-200 text-black dark:text-white hover:text-white text-xs">
                     <>{item.isSelected ? "Selected" : "Not selected"}</>
                   </Badge>
                 )}
               </div>
             </li>
-            {item?.data?.length > 0 && (
-              <details className="pb-4">
-                <summary className="cursor-pointer font-semibold text-base bg-slate-100 p-2 rounded-md capitalize mb-2">
-                  Linked Titles and Values for {item.value} tab
-                </summary>
-                <div className="space-y-2">
-                  <>
-                    {item.data.map((item) =>
-                      titles
-                        .filter((title) => title.id === item.titleId)
-                        .map((item) => (
-                          <li
-                            key={item.id}
-                            className="font-semibold text-base bg-slate-100 p-2 rounded-md capitalize">
-                            {Array.isArray(item.value)
-                              ? item.value.join(", ")
-                              : item.value}
-                          </li>
-                        ))
-                    )}
-                    {item.data.map((item) =>
-                      values
-                        .filter((value) => value.id === item.valueId)
-                        .map((item) => (
-                          <li
-                            key={item.id}
-                            className="font-semibold text-base bg-slate-100 p-2 rounded-md capitalize">
-                            {Array.isArray(item.value)
-                              ? item.value.join(", ")
-                              : item.value}
-                          </li>
-                        ))
-                    )}
-                  </>
-                </div>
-              </details>
-            )}
+            {item.type === "tab" && item.data.length > 0 && <ListTabs item={item} />}
+            {item.type === "value" && item.data.length > 0 && <ListValues item={item} />}
           </div>
         ))}
       </ul>

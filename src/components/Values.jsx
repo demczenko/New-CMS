@@ -6,17 +6,20 @@ import { Textarea } from "./ui/textarea";
 import { List } from ".";
 import { useTab } from "../hooks/useTab";
 import { useTitle } from "../hooks/useTitle";
+import { Input } from "./ui/input";
 
 const ValueContent = ({ isFormOpen, setFormClose }) => {
   const [values, setValues] = useValue();
   const [tabs, setTabs] = useTab();
   const [titles, setTitles] = useTitle();
 
-  const handleForm = ({ value_name }) => {
+  const handleForm = ({ value_data, value_name }) => {
     const newValue = {
       id: uuidv4(),
+      type: 'value',
       isSelected: false,
-      value: value_name.split("\n"),
+      value: value_name,
+      data: value_data.split("\n")
     };
     setValues((prev) => [...prev, newValue]);
     setFormClose();
@@ -108,15 +111,17 @@ const ValueForm = ({ handleForm }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-1 grid grid-cols-4 gap-x-2">
-        <div className="col-span-3">
-          <Textarea
-            rows={6}
-            placeholder="Enter values..."
-            className="max-h-[260px]"
+        <div className="col-span-1">
+          <Input
+            placeholder="Enter value name..."
             {...register("value_name", {
               required: {
                 value: true,
-                message: "Value is required.",
+                message: "Value name is required.",
+              },
+              maxLength: {
+                value: 10,
+                message: "Maximum length is 10 symbols",
               },
               minLength: {
                 value: 2,
@@ -127,6 +132,28 @@ const ValueForm = ({ handleForm }) => {
           {errors.value_name && (
             <span className="text-red-300 text-sm">
               {errors.value_name.message}
+            </span>
+          )}
+        </div>
+        <div className="col-span-2">
+          <Textarea
+            rows={6}
+            placeholder="Enter values..."
+            className="max-h-[260px]"
+            {...register("value_data", {
+              required: {
+                value: true,
+                message: "Value is required.",
+              },
+              minLength: {
+                value: 2,
+                message: "Minimum length is 2 symbols",
+              },
+            })}
+          />
+          {errors.value_data && (
+            <span className="text-red-300 text-sm">
+              {errors.value_data.message}
             </span>
           )}
         </div>

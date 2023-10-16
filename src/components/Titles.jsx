@@ -16,6 +16,7 @@ const TitleContent = ({ isFormOpen, setFormClose }) => {
   const handleForm = ({ title_name }) => {
     const newTitle = {
       id: uuidv4(),
+      type: 'title',
       isSelectedOnEveryTab: false,
       isSelected: false,
       value: title_name,

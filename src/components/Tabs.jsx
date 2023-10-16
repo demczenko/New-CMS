@@ -36,6 +36,7 @@ const TabContent = ({
     const newTab = {
       id: uuidv4(),
       value: tab_name,
+      type: 'tab',
       data: [],
     };
 

@@ -67,6 +67,7 @@ const TemplateRouterGuard = ({ children }) => {
 
     let result;
     titles.forEach(tab => {
+      console.log('1');
       result = isEveryTabWithTheSameTitleIdHasTheSameValueLength(tab.id)
     })
     if (!result) {
