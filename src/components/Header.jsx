@@ -137,7 +137,6 @@ const HeaderForm = ({ handleForm }) => {
 const TabHeaderForm = ({ handleForm }) => {
   const [tabs, setTabs] = useTab();
   const [headers, setHtml] = useHeader();
-
   const {
     control,
     handleSubmit,
@@ -164,6 +163,7 @@ const TabHeaderForm = ({ handleForm }) => {
                   
                   placeholder={"Select tab..."}
                   items={tabs}
+                  // items={tabs.filter((tab) => tab.header_id.length === 0)}
                 />
               );
             }}

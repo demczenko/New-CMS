@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useTab } from "../hooks/useTab";
 import { useValue } from "../hooks/useValue";
 import { useFooter, useHeader } from "../hooks";
+import { toast } from "react-hot-toast";
 
 const TemplateRouterGuard = ({ children }) => {
   const [titles, setTItle] = useTitle();
@@ -59,10 +60,12 @@ const TemplateRouterGuard = ({ children }) => {
 
     if (!titles.length) {
       navigate("/data");
+      toast.error("No titles found.")
     }
 
     if (!isEveryFooterAndHeaderSelected()) {
       navigate("/template");
+      toast.error("Not every footer and header has been selected.")
     }
 
     let result;
@@ -71,11 +74,13 @@ const TemplateRouterGuard = ({ children }) => {
     })
     if (!result) {
       navigate("/data");
+      toast.error("Not every tab with the same title id has the same value length.")
     }
     
     if (titles.lengt >= 1) {
       if (!isEveryTitleHasBeenAddedToEveryTab()) {
         navigate("/data");
+        toast.error("Add every title to tab.")
       }
     }
   }, []);

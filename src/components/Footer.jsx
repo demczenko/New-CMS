@@ -166,6 +166,7 @@ const TabFooterForm = ({ handleForm }) => {
                   onValueChange={field.onChange}
                   placeholder={"Select tab..."}
                   items={tabs}
+                  // items={tabs.filter((tab) => tab.footer_id.length === 0)}
                 />
               );
             }}

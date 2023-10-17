@@ -24,7 +24,7 @@ const ListTabs = ({ item }) => {
                       {item}
                     </p>
                   ))
-                : value.data}
+                : <p key={id}>{value.data}</p>}
             </li>
           );
         })}

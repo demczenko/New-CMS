@@ -42,6 +42,8 @@ const TabContent = ({
       value: tab_name,
       type: 'tab',
       isSelected: false,
+      header_id: "",
+      footer_id: "",
       data: [],
     };
 

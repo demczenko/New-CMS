@@ -39,7 +39,6 @@ const RenderForm = ({ handleForm }) => {
   const {
     control,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm();
 
@@ -54,7 +53,10 @@ const RenderForm = ({ handleForm }) => {
             control={control}
             name="tab_id"
             rules={{
-              required: true,
+              required: {
+                value: true,
+                message: "Please select key."
+              },
             }}
             render={({ field }) => {
               return (
@@ -78,7 +80,10 @@ const RenderForm = ({ handleForm }) => {
             control={control}
             name="mainId"
             rules={{
-              required: true,
+              required: {
+                value: true,
+                message: "Please select template."
+              },
             }}
             render={({ field }) => {
               return (
