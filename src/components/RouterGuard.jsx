@@ -51,7 +51,7 @@ const TemplateRouterGuard = ({ children }) => {
         }
       }
     }
-    const filterValuesLength = filterValues.map((item) => item.value.length);
+    const filterValuesLength = filterValues.map((item) => item.data.length);
     const firstItem = filterValuesLength[0]
     return filterValuesLength.every(item => item === firstItem)
   };

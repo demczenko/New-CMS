@@ -6,17 +6,17 @@ const ListValues = ({ item }) => {
       <summary className="cursor-pointer font-semibold text-base bg-slate-100 p-2 rounded-md capitalize mb-2">
         Data for {item.value}
       </summary>
-      <div className="space-y-2">
+      <ul className="space-y-2">
         {item.data.map((item, id) => {
           return (
             <li
               key={item + id}
-              className="font-semibold text-base bg-slate-100 p-2 rounded-md capitalize md:ml-4 ml-2">
+              className="text-sm text-neutral-600 bg-slate-100 p-2 rounded-md capitalize md:ml-4 ml-2">
               {item}
             </li>
           );
         })}
-      </div>
+      </ul>
     </details>
   );
 };

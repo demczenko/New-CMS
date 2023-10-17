@@ -13,6 +13,7 @@ import HeaderActions from "./HeaderActions";
 import RenderArea from "./RenderArea";
 import RenderHeading from "./RenderHeading";
 import TemplateNotFound from "./TemplateNotFound";
+import RightBar from "./RightBar";
 
 export {
   TemplateNotFound,
@@ -23,6 +24,7 @@ export {
   Header,
   Footer,
   List,
+  RightBar,
   SelectComponent,
   RouterGuard,
   TabContent,

@@ -13,10 +13,10 @@ export const useRenderArea = () => {
 };
 
 const RenderArea = ({ children }) => {
-  const [selectedTab, setSelectedTab] = useState("");
+  const [selectedTabAndMainId, setselectedTabAndMainId] = useState("");
 
   return (
-    <RenderAreaContext.Provider value={[selectedTab, setSelectedTab]}>
+    <RenderAreaContext.Provider value={[selectedTabAndMainId, setselectedTabAndMainId]}>
       {children}
     </RenderAreaContext.Provider>
   );

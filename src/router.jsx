@@ -1,7 +1,12 @@
 import { Data, ErrorPage, Render, Template } from "./pages/index.js";
 import App from "./App.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { RenderArea, RenderHeading, RouterGuard } from "./components/index.js";
+import {
+  RenderArea,
+  RenderHeading,
+  RightBar,
+  RouterGuard,
+} from "./components/index.js";
 
 const routes = createBrowserRouter([
   {
@@ -26,9 +31,18 @@ const routes = createBrowserRouter([
         element: (
           <RouterGuard>
             <RenderArea>
-              <RenderHeading />
-              <hr />
-              <Render />
+              <div className="col-span-full md:col-span-6 py-4">
+                <div className="container mx-auto px-4">
+                  <RenderHeading />
+                  <hr className="my-4" />
+                  <Render />
+                </div>
+              </div>
+              <div className="col-span-full md:col-span-3 py-4">
+                <div className="container h-full mx-auto px-4">
+                  <RightBar />
+                </div>
+              </div>
             </RenderArea>
           </RouterGuard>
         ),
