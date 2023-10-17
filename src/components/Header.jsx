@@ -46,6 +46,7 @@ const Header = ({
         if (item.id === tab_id) {
           return {
             ...item,
+            isSelected: true,
             header_id
           };
         }

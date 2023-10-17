@@ -25,8 +25,6 @@ const Footer = ({
     setFormClose();
   };
 
-  console.log(tabs);
-
   const markFooterAsUsed = (footer_id) => {
     setHtml((prev) => {
       return prev.map((value) => {
@@ -48,6 +46,7 @@ const Footer = ({
         if (item.id === tab_id) {
           return {
             ...item,
+            isSelected: true,
             footer_id
           };
         }

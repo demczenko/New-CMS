@@ -7,6 +7,7 @@ import { useValue } from "../hooks/useValue";
 import { useTitle } from "../hooks/useTitle";
 import { useTab } from "../hooks/useTab";
 import { v4 as uuidv4 } from "uuid";
+import { useFooter, useHeader } from "../hooks";
 
 const TabContent = ({
   isTabFormOpen,
@@ -17,6 +18,9 @@ const TabContent = ({
   const [values, setValues] = useValue();
   const [tabs, setTabs] = useTab();
   const [titles, setTitles] = useTitle();
+
+  const [headers, setHeader] = useHeader();
+  const [footers, setFooter] = useFooter();
 
   const isTitleIdTakenToManyTabs = (titleId) => {
     const tabsId = [];
@@ -37,6 +41,7 @@ const TabContent = ({
       id: uuidv4(),
       value: tab_name,
       type: 'tab',
+      isSelected: false,
       data: [],
     };
 
@@ -109,11 +114,79 @@ const TabContent = ({
     setIsTabFormClose();
   };
 
+  const markFooterAsUnUsed = (footer_id) => {
+    setFooter((prev) => {
+      return prev.map((value) => {
+        if (value.id === footer_id) {
+          return {
+            ...value,
+            isSelected: false,
+          };
+        }
+        return value;
+      });
+    });
+  };
+
+  const markHeaderAsUnUsed = (header_id) => {
+    setHeader((prev) => {
+      return prev.map((value) => {
+        if (value.id === header_id) {
+          return {
+            ...value,
+            isSelected: false,
+          };
+        }
+        return value;
+      });
+    });
+  };
+
+  const handleTabDelete = (id) => {
+    const tab = tabs.find(tab => tab.id === id);
+    if (tab.data.length) {
+      const valuesIds = []
+      const titleIds = []
+      for (const t of tab.data) {
+        valuesIds.push(t.valueId)
+        titleIds.push(t.titleId)
+      }
+      titleIds.forEach(id => setTitles((prev) => prev.map((elem) => {
+        if (elem.id === id) {
+          return {
+            ...elem,
+            isSelected: false,
+          }
+        }
+        return elem
+      })))
+
+      valuesIds.forEach(id => setValues((prev) => prev.map((elem) => {
+        if (elem.id === id) {
+          return {
+            ...elem,
+            isSelected: false,
+          }
+        }
+        return elem
+      })))
+    }
+
+    if (tab?.header_id) {
+      markHeaderAsUnUsed(tab?.header_id)
+    }
+
+    if (tab?.footer_id) {
+      markFooterAsUnUsed(tab?.footer_id)
+    }
+    setTabs((prev) => prev.filter((item) => item.id !== id))
+  }
+
   return (
     <div>
       {isFormOpen && <TabForm tabs={tabs} handleForm={handleAddTabForm} />}
       {isTabFormOpen && <TabValueForm handleForm={handleAddTabValueForm} />}
-      <List items={tabs} title="Tabs" subtitle={"Manage created tabs."} />
+      <List items={tabs} title="Tabs" handleDelete={handleTabDelete} subtitle={"Manage created tabs."} />
     </div>
   );
 };

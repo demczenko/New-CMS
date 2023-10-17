@@ -7,8 +7,13 @@ import {
   TabsTrigger,
 } from "../components/ui/tabs";
 import { Button } from "../components/ui/button";
+import { useTab, useTitle, useValue } from "../hooks";
 
 const Data = () => {
+  const [tabs, setTabs] = useTab();
+  const [titles, setTitles] = useTitle();
+  const [values, setValues] = useValue();
+
   const [activeTab, setActiveTab] = useState("tabs");
   const [isFormOpen, setFormOpen] = useState(false);
   const [isTabFormOpen, setIsTabFormOpen] = useState(false);
@@ -32,11 +37,21 @@ const Data = () => {
       <div className="flex justify-between items-center mb-6">
         <Heading title="Data" />
         <div className="space-x-2">
-          <Button className="py-1 px-2 md:py-2 md:px-4 text-sm" onClick={handleAddClick}>Add {activeTab}</Button>
+          <Button
+            className="py-1 px-2 md:py-2 md:px-4 text-sm"
+            onClick={handleAddClick}>
+            Add {activeTab}
+          </Button>
           {activeTab === "tabs" && (
-            <Button className="py-1 px-2 md:py-2 md:px-4 text-sm" onClick={handleLinkTabsAndValuesClick}>
-              Link tab and value
-            </Button>
+            <>
+              {tabs.length > 0 && titles.length > 0 && values.length > 0 && (
+                <Button
+                  className="py-1 px-2 md:py-2 md:px-4 text-sm"
+                  onClick={handleLinkTabsAndValuesClick}>
+                  Link tab and value
+                </Button>
+              )}
+            </>
           )}
         </div>
       </div>

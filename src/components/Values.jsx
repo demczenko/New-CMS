@@ -80,7 +80,6 @@ const ValueContent = ({ isFormOpen, setFormClose }) => {
         });
       });
       titleId = "";
-      console.log("title is not selected to many tabs");
     }
   };
 
