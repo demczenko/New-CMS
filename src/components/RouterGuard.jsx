@@ -46,6 +46,8 @@ const TemplateRouterGuard = ({ children }) => {
       const result = tab.data.find((item) => item.titleId === titleId);
       if (result !== undefined) {
         filterValueIds.push(result.valueId);
+      } else {
+        return false
       }
     }
 
@@ -57,6 +59,7 @@ const TemplateRouterGuard = ({ children }) => {
         }
       }
     }
+
     const filterValuesLength = filterValues.map((item) => item.data.length);
     const firstItem = filterValuesLength[0];
     return filterValuesLength.every((item) => item === firstItem);
@@ -92,7 +95,7 @@ const TemplateRouterGuard = ({ children }) => {
     if (!result) {
       navigate("/data");
       toast.error(
-        "Not every tab with the same title id has the same value length."
+        "Please, select every value."
       );
     }
 

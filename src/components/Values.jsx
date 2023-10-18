@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import { useValue } from "../hooks/useValue";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { List } from ".";
+import { List, SelectComponent } from ".";
 import { useTab } from "../hooks/useTab";
 import { useTitle } from "../hooks/useTitle";
 import { Input } from "./ui/input";
@@ -13,13 +13,14 @@ const ValueContent = ({ isFormOpen, setFormClose }) => {
   const [tabs, setTabs] = useTab();
   const [titles, setTitles] = useTitle();
 
-  const handleForm = ({ value_data, value_name }) => {
+  const handleForm = ({ value_data, value_name, value_type }) => {
     const newValue = {
       id: uuidv4(),
-      type: 'value',
+      type: "value",
+      dataType: value_type,
       isSelected: false,
       value: value_name,
-      data: value_data.split("\n")
+      data: value_data.split("\n"),
     };
     setValues((prev) => [...prev, newValue]);
     setFormClose();
@@ -65,7 +66,7 @@ const ValueContent = ({ isFormOpen, setFormClose }) => {
     );
 
     if (isTitleIdTakenToManyTabs(titleId)) {
-      return
+      return;
     } else {
       setTitles((prev) => {
         return prev.map((item) => {
@@ -100,6 +101,7 @@ const ValueForm = ({ handleForm }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm();
 
@@ -131,6 +133,47 @@ const ValueForm = ({ handleForm }) => {
           {errors.value_name && (
             <span className="text-red-300 text-sm">
               {errors.value_name.message}
+            </span>
+          )}
+        </div>
+        <div>
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Please select type of value",
+              },
+            }}
+            name="value_type"
+            render={({ field }) => {
+              return (
+                <SelectComponent
+                  {...field}
+                  onValueChange={field.onChange}
+                  className="col-span-1"
+                  placeholder={"Select type..."}
+                  items={[
+                    {
+                      id: "href",
+                      value: "href"
+                    },
+                    {
+                      id: "src",
+                      value: "src"
+                    },
+                    {
+                      id: "text",
+                      value: "text"
+                    }
+                  ]}
+                />
+              );
+            }}
+          />
+          {errors.value_type && (
+            <span className="text-red-300 text-sm">
+              {errors.value_type.message}
             </span>
           )}
         </div>

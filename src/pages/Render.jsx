@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Heading, TemplateNotFound } from "../components";
 import { SRC_TAGS } from "../constance/SRC_TAGS";
 import { HREF_TAGS } from "../constance/HREF_TAGS";
@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 const Render = () => {
   const [node, setNode] = useState();
   const ref = useRef();
-  
+
   const [tabs, setTabs] = useTab();
   const [main, setMain] = useMain();
   const [values, setValues] = useValue();
@@ -18,75 +18,44 @@ const Render = () => {
   const [footers, setFooter] = useFooter();
 
   const {
-    values: { selectedTabAndMainId, isOpen, selectedData, targets },
-    functions: {
-      setselectedTabAndMainId,
-      setIsOpen,
-      setSelectedData,
-      setNewTarget,
-    },
+    values: { selectedTabAndMainId, selectedData, targets },
+    functions: { setNewTarget, setSelectedData },
   } = useRenderArea();
-  const { id, valueId, type } = selectedData;
+  const { id, type } = selectedData;
+  const { tab_id, main_id } = selectedTabAndMainId;
 
   const swapText = (node) => {
-    const findValueData = values.find((value) => value.id === node.id);
-    node.target.textContent = findValueData.data[node.index];
+    const findTabObj = tabs.find((tab) => tab.id === tab_id);
+    const findValueId = findTabObj.data.find(
+      (item) => item.titleId === node.titleId
+    );
+    const valueData = values.find((item) => item.id === findValueId.valueId);
+    node.target.textContent = valueData.data[node.valueId];
   };
 
   const swapHref = (node) => {};
 
   const swapSrc = (node) => {};
 
-  useEffect(() => {
-    if (node && type) {
-      if (isAlreadySwapped === undefined) {
-        if (type === "link") {
-          if (!handleHrefAttribute()) {
-            return;
-          }
-        }
-
-        if (type === "image") {
-          if (!handleSrcAttribute()) {
-            return;
-          }
-        }
-
-        setNewTarget((prev) => [
-          ...prev,
-          { index: valueId, type: type, id: id, target: node },
-        ]);
-      } else {
-        toast.error("Node is already taken");
+  if (node && type) {
+    if (type === "link") {
+      if (!handleHrefAttribute()) {
+        return;
       }
     }
-  }, [id, type, node]);
 
-  useEffect(() => {
-    if (!ref.current) return;
-
-    function handleNodeClick(ev) {
-      // ev.preventDefault();
-      // if (type === "href") {
-      //   const aTag = ev.target.parentNode;
-      //   setNode(aTag);
-      // } else {
-      //   setNode(ev.target);
-      // }
-
-      setNode(ev.target);
-      toast.success("Node added.");
+    if (type === "image") {
+      if (!handleSrcAttribute()) {
+        return;
+      }
     }
-    ref.current.addEventListener("click", handleNodeClick);
-    return () => {
-      if (!ref.current) return;
-      ref.current.removeEventListener("click", handleNodeClick);
-    };
-  }, []);
 
-  let isAlreadySwapped;
+    setNewTarget((prev) => [...prev, { ...selectedData, target: node }]);
+    setNode();
+    setSelectedData({ id: "", type: "" });
+  }
+
   if (targets.length) {
-    isAlreadySwapped = targets.find((item) => item.target === node);
     for (const key in targets) {
       const node = targets[key];
 
@@ -104,21 +73,34 @@ const Render = () => {
     }
   }
 
-  if (!main.length) {
-    return null;
-  }
+  useEffect(() => {
+    if (!ref.current) return;
 
-  const mainHtmlTemplateToRender = main.find(
-    (template) => template.id === selectedTabAndMainId.main_id
-  );
+    function handleNodeClick(ev) {
+      ev.preventDefault();
+      setNode(ev.target);
+      toast.success("Node selected.");
+    }
+
+    ref.current.addEventListener("click", handleNodeClick);
+    return () => {
+      if (!ref.current) return;
+      ref.current.removeEventListener("click", handleNodeClick);
+    };
+  }, [tab_id]);
+
+  const mainHtmlTemplateToRender = useMemo(() => {
+    if (!main_id) {
+      return;
+    }
+    return main.find((template) => template.id === main_id)?.html;
+  }, [main_id]);
 
   if (mainHtmlTemplateToRender === undefined) {
     return <TemplateNotFound />;
   }
 
-  const selectedTab = tabs.find(
-    (tab) => tab.id === selectedTabAndMainId.tab_id
-  );
+  let selectedTab = tabs.find((tab) => tab.id === selectedTabAndMainId.tab_id);
 
   let headerHtmlTemplateToRender;
   let footerHtmlTemplateToRender;
@@ -133,27 +115,6 @@ const Render = () => {
       (header) => header.id === selectedTab.header_id
     );
   }
-  const getTemplateToRender = () => {
-    if (!headerHtmlTemplateToRender && !footerHtmlTemplateToRender) {
-      return mainHtmlTemplateToRender.html;
-    }
-    if (headerHtmlTemplateToRender && footerHtmlTemplateToRender) {
-      return (
-        headerHtmlTemplateToRender.html +
-        mainHtmlTemplateToRender.html +
-        footerHtmlTemplateToRender.html
-      );
-    }
-
-    if (headerHtmlTemplateToRender) {
-      return headerHtmlTemplateToRender.html + mainHtmlTemplateToRender.html;
-    }
-
-    if (footerHtmlTemplateToRender) {
-      return mainHtmlTemplateToRender.html + footerHtmlTemplateToRender.html;
-    }
-  };
-
   const handleHrefAttribute = () => {
     if (!HREF_TAGS.includes(node.nodeName.toLowerCase())) {
       toast.error(`Href attribute is not acceptable for ${node.nodeName} tag`);
@@ -172,13 +133,29 @@ const Render = () => {
 
   return (
     <section>
+      {headerHtmlTemplateToRender && (
+        <div
+          className="bg-gray-200"
+          dangerouslySetInnerHTML={{
+            __html: headerHtmlTemplateToRender.html,
+          }}
+        />
+      )}
       <div
         ref={ref}
         className="bg-gray-200"
         dangerouslySetInnerHTML={{
-          __html: getTemplateToRender(),
+          __html: mainHtmlTemplateToRender,
         }}
       />
+      {footerHtmlTemplateToRender && (
+        <div
+          className="bg-gray-200"
+          dangerouslySetInnerHTML={{
+            __html: footerHtmlTemplateToRender.html,
+          }}
+        />
+      )}
     </section>
   );
 };

@@ -21,7 +21,7 @@ const SelectComponent = forwardRef(function SelectComponent(
         <SelectGroup>
           {items.map((item) => (
             <SelectItem key={item.id} value={item.id}>
-              {Array.isArray(item.value) ? item.value[0] : item.value}
+              {item.value}
             </SelectItem>
           ))}
         </SelectGroup>
