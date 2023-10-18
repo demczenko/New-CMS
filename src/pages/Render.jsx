@@ -3,45 +3,107 @@ import { Heading, TemplateNotFound } from "../components";
 import { SRC_TAGS } from "../constance/SRC_TAGS";
 import { HREF_TAGS } from "../constance/HREF_TAGS";
 import { useRenderArea } from "../components/RenderArea";
-import { useFooter, useHeader, useMain, useTab } from "../hooks";
+import { useFooter, useHeader, useMain, useTab, useValue } from "../hooks";
+import { toast } from "react-hot-toast";
 
 const Render = () => {
+  const [node, setNode] = useState();
   const ref = useRef();
+  
   const [tabs, setTabs] = useTab();
   const [main, setMain] = useMain();
+  const [values, setValues] = useValue();
+
   const [headers, setHeader] = useHeader();
   const [footers, setFooter] = useFooter();
 
-  const [node, setNode] = useState();
-  const [selectedData, setSelectedData] = useState({ id: 1, type: "href" });
-  const { id, type } = selectedData;
-
-  console.log(node);
-
   const {
-    values: { selectedTabAndMainId, targets },
-    functions: { setNewTarget },
+    values: { selectedTabAndMainId, isOpen, selectedData, targets },
+    functions: {
+      setselectedTabAndMainId,
+      setIsOpen,
+      setSelectedData,
+      setNewTarget,
+    },
   } = useRenderArea();
+
+  const { id, valueId, type } = selectedData;
+
+  const swapText = (node) => {
+    const findValueData = values.find((value) => value.id === node.id);
+    node.target.textContent = findValueData.data[node.index];
+  };
+
+  const swapHref = (node) => {};
+
+  const swapSrc = (node) => {};
+
+  useEffect(() => {
+    if (node && type) {
+      if (isAlreadySwapped === undefined) {
+        if (type === "link") {
+          if (!handleHrefAttribute()) {
+            return;
+          }
+        }
+
+        if (type === "image") {
+          if (!handleSrcAttribute()) {
+            return;
+          }
+        }
+
+        setNewTarget((prev) => [
+          ...prev,
+          { index: valueId, type: type, id: id, target: node },
+        ]);
+      } else {
+        toast.error("Node is already taken");
+      }
+    }
+  }, [id, type, node]);
 
   useEffect(() => {
     if (!ref.current) return;
 
     function handleNodeClick(ev) {
-      ev.preventDefault();
-      if (type === "href") {
-        const aTag = ev.target.parentNode;
-        setNode(aTag);
-      } else {
-        setNode(ev.target);
-      }
-    }
+      // ev.preventDefault();
+      // if (type === "href") {
+      //   const aTag = ev.target.parentNode;
+      //   setNode(aTag);
+      // } else {
+      //   setNode(ev.target);
+      // }
 
+      setNode(ev.target);
+      toast.success("Node added.");
+    }
     ref.current.addEventListener("click", handleNodeClick);
     return () => {
       if (!ref.current) return;
       ref.current.removeEventListener("click", handleNodeClick);
     };
-  }, [type]);
+  }, []);
+
+  let isAlreadySwapped;
+  if (targets.length) {
+    isAlreadySwapped = targets.find((item) => item.target === node);
+    for (const key in targets) {
+      const node = targets[key];
+
+      if (node.type === "text") {
+        swapText(node);
+      }
+
+      if (node.type === "href") {
+        swapHref(node);
+      }
+
+      if (node.type === "src") {
+        swapSrc(node);
+      }
+    }
+  }
 
   if (!main.length) {
     return null;
@@ -50,6 +112,7 @@ const Render = () => {
   const mainHtmlTemplateToRender = main.find(
     (template) => template.id === selectedTabAndMainId.main_id
   );
+
   if (mainHtmlTemplateToRender === undefined) {
     return <TemplateNotFound />;
   }
@@ -92,133 +155,21 @@ const Render = () => {
     }
   };
 
-  // const isAlreadySwapped = targets.find((item) => item.target === node);
+  const handleHrefAttribute = () => {
+    if (!HREF_TAGS.includes(node.nodeName.toLowerCase())) {
+      toast.error(`Href attribute is not acceptable for ${node.nodeName} tag`);
+      return false;
+    }
+    return true;
+  };
 
-  // const handleHrefAttribute = () => {
-  //   if (!HREF_TAGS.includes(node.nodeName.toLowerCase())) {
-  //     toast({
-  //       variant: "destructive",
-  //       title: `Sorry, but i can't change href attribute for ${node.nodeName} tag.`,
-  //     });
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
-  // const handleSrcAttribute = () => {
-  //   if (!SRC_TAGS.includes(node.nodeName.toLowerCase())) {
-  //     toast({
-  //       variant: "destructive",
-  //       title: `Sorry, but i can't change src attribute for ${node.nodeName} tag.`,
-  //     });
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
-  // useEffect(() => {
-  //   if (node && type) {
-  //     if (isAlreadySwapped === undefined) {
-  //       if (type === "link") {
-  //         if (!handleHrefAttribute()) {
-  //           return;
-  //         }
-  //       }
-
-  //       if (type === "image") {
-  //         if (!handleSrcAttribute()) {
-  //           return;
-  //         }
-  //       }
-
-  //       setTargets((prev) => [
-  //         ...prev,
-  //         { index: id, type: type, target: node },
-  //       ]);
-  //     } else {
-  //       toast({
-  //         variant: "destructive",
-  //         title: "Node is already taken.",
-  //         description: `This node is already taken by ${isAlreadySwapped.type} index ${isAlreadySwapped.index}. You want overwrite linked data?`,
-  //         action: (
-  //           <>
-  //             <ToastAction
-  //               onClick={() => {
-  //                 if (type === "link") {
-  //                   if (handleHrefAttribute()) {
-  //                     return;
-  //                   }
-  //                 }
-
-  //                 if (type === "image") {
-  //                   if (!handleSrcAttribute()) {
-  //                     return;
-  //                   }
-  //                 }
-  //                 setTargets((prev) => {
-  //                   return prev.map((item) => {
-  //                     if (item.target === node) {
-  //                       return {
-  //                         index: id,
-  //                         type: type,
-  //                         target: node,
-  //                       };
-  //                     }
-  //                     return item;
-  //                   });
-  //                 });
-  //               }}
-  //               altText="Swap">
-  //               Confirm
-  //             </ToastAction>
-  //             <ToastAction
-  //               onClick={() => {
-  //                 setNode(null);
-  //                 setSelectedData({ id: "", type: "" });
-  //                 dismiss();
-  //               }}
-  //               altText="Try again">
-  //               Cancel
-  //             </ToastAction>
-  //           </>
-  //         ),
-  //       });
-  //     }
-  //   }
-  // }, [id, type, node]);
-
-  // useEffect(() => {
-  //   setNode(null);
-  //   setSelectedData({ id: "", type: "" });
-  //   for (const key in targets) {
-  //     const node = targets[key];
-
-  //     if (node.type === "text_node") {
-  //       const selectedItemData = selectedKey.data.find(
-  //         (item) => item.type === "text_node"
-  //       )["text_node"];
-  //       node.target.textContent = selectedItemData[node.index];
-  //     }
-
-  //     if (node.type === "href") {
-  //       const selectedItemData = selectedKey.data.find(
-  //         (item) => item.type === "href"
-  //       )["href"];
-  //       node.target.href = selectedItemData[node.index];
-  //     }
-
-  //     if (node.type === "src") {
-  //       const { file_type, server, value } = images[node.index];
-  //       const selectedItemData = selectedKey.data.find(
-  //         (item) => item.type === "src"
-  //       )["src"];
-  //       // const link = server + country.toLowerCase() + value + file_type;
-  //       // node.target.src = link;
-  //     }
-  //   }
-  // }, [targets, selectedTemplate]);
-
-
+  const handleSrcAttribute = () => {
+    if (!SRC_TAGS.includes(node.nodeName.toLowerCase())) {
+      toast.error(`Src attribute is not acceptable for ${node.nodeName} tag`);
+      return false;
+    }
+    return true;
+  };
 
   return (
     <section>

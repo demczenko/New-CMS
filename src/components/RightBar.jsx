@@ -54,7 +54,7 @@ const RightBar = () => {
               {valuesByTab !== undefined && (
                 <div className="sticky top-3">
                   {valuesByTab.map((value, id) => (
-                    <ListValues key={id} item={value} />
+                    <ListValues key={id} item={value} render={true} />
                   ))}
                 </div>
               )}

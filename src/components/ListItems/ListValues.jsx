@@ -1,18 +1,30 @@
 import React from "react";
+import { useRenderArea } from "../RenderArea";
 
-const ListValues = ({ item }) => {
+const ListValues = ({ item, render = false }) => {
+  const {
+    values: { selectedTabAndMainId, isOpen },
+    functions: { setselectedTabAndMainId, setIsOpen, setSelectedData },
+  } = useRenderArea();
+
+  const handleSelectedItem = (item) => {
+    setSelectedData(item);
+  };
   return (
     <details className="pb-4">
       <summary className="cursor-pointer font-semibold text-base bg-slate-100 p-2 rounded-md capitalize mb-2">
-        Data for {item.value}
+        {item.value}
       </summary>
       <ul className="space-y-2">
-        {item.data.map((item, id) => {
+        {item.data.map((elem, id) => {
           return (
             <li
-              key={item + id}
-              className="text-sm text-neutral-600 bg-slate-50 p-2 rounded-md capitalize md:ml-4 ml-2">
-              {item}
+              key={elem + id}
+              className="text-sm text-neutral-600 bg-slate-50 p-2 rounded-md capitalize md:ml-4 ml-2 relative">
+              {elem}
+              {render && (
+                <p onClick={() => handleSelectedItem({ id: item.id, valueId: id, type: "text"})} className="absolute top-1/2 -translate-y-1/2 right-1 hover:bg-slate-200 transition-colors px-3 font-semibold lowercase rounded-md py-1 text-xs cursor-pointer bg-slate-50">select item</p>
+              )}
             </li>
           );
         })}

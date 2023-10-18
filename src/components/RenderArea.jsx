@@ -16,6 +16,8 @@ const RenderArea = ({ children }) => {
   const [selectedTabAndMainId, setselectedTabAndMainId] = useState("");
   const [isOpen, setIsOpen] = useState("");
   const [targets, setNewTarget] = useState([]);
+  const [selectedNode, setSelectedNode] = useState([]);
+  const [selectedData, setSelectedData] = useState([]);
 
   return (
     <RenderAreaContext.Provider
@@ -23,12 +25,16 @@ const RenderArea = ({ children }) => {
         values: {
           selectedTabAndMainId,
           isOpen,
-          targets
+          targets,
+          selectedData,
+          selectedNode
         },
         functions: {
           setselectedTabAndMainId,
           setIsOpen,
-          setNewTarget
+          setNewTarget,
+          setSelectedNode,
+          setSelectedData
         },
       }}>
       {children}
