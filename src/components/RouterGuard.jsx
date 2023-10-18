@@ -1,31 +1,37 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTitle } from "../hooks/useTitle";
 import React, { useEffect } from "react";
 import { useTab } from "../hooks/useTab";
 import { useValue } from "../hooks/useValue";
-import { useFooter, useHeader } from "../hooks";
+import { useFooter, useHeader, useMain } from "../hooks";
 import { toast } from "react-hot-toast";
 
 const TemplateRouterGuard = ({ children }) => {
   const [titles, setTItle] = useTitle();
   const [tabs, setTabs] = useTab();
   const [values, setValues] = useValue();
+  const { pathname } = useLocation();
 
   const [headers, setHeader] = useHeader();
   const [footers, setFooter] = useFooter();
+  const [main, setMain] = useMain();
 
   const navigate = useNavigate();
 
   const isEveryFooterAndHeaderSelected = () => {
-    const isEveryFootersSelected = headers.map((item) => item.isSelected).every((item) => item === true);
-    const isEveryHeaderSelected = footers.map((item) => item.isSelected).every((item) => item === true);
+    const isEveryFootersSelected = headers
+      .map((item) => item.isSelected)
+      .every((item) => item === true);
+    const isEveryHeaderSelected = footers
+      .map((item) => item.isSelected)
+      .every((item) => item === true);
 
     if (isEveryFootersSelected && isEveryHeaderSelected) {
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
-  }
+  };
 
   const isEveryTitleHasBeenAddedToEveryTab = () => {
     let result = titles
@@ -52,35 +58,48 @@ const TemplateRouterGuard = ({ children }) => {
       }
     }
     const filterValuesLength = filterValues.map((item) => item.data.length);
-    const firstItem = filterValuesLength[0]
-    return filterValuesLength.every(item => item === firstItem)
+    const firstItem = filterValuesLength[0];
+    return filterValuesLength.every((item) => item === firstItem);
   };
 
   useEffect(() => {
+    if (!titles.length) {
+      navigate("/data");
+      toast.error("No titles found.");
+    }
+
+    if (pathname === "/render") {
+      if (!main.length) {
+        navigate("/template");
+        toast.error("No templates found.");
+      }
+    }
 
     if (!titles.length) {
       navigate("/data");
-      toast.error("No titles found.")
+      toast.error("No titles found.");
     }
 
     if (!isEveryFooterAndHeaderSelected()) {
       navigate("/template");
-      toast.error("Not every footer and header has been selected.")
+      toast.error("Not every footer and header has been selected.");
     }
 
     let result;
-    titles.forEach(tab => {
-      result = isEveryTabWithTheSameTitleIdHasTheSameValueLength(tab.id)
-    })
+    titles.forEach((tab) => {
+      result = isEveryTabWithTheSameTitleIdHasTheSameValueLength(tab.id);
+    });
     if (!result) {
       navigate("/data");
-      toast.error("Not every tab with the same title id has the same value length.")
+      toast.error(
+        "Not every tab with the same title id has the same value length."
+      );
     }
-    
+
     if (titles.lengt >= 1) {
       if (!isEveryTitleHasBeenAddedToEveryTab()) {
         navigate("/data");
-        toast.error("Add every title to tab.")
+        toast.error("Add every title to tab.");
       }
     }
   }, []);

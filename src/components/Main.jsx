@@ -24,12 +24,13 @@ const Main = ({
   };
 
   const handleAddTabValueForm = (tab_id) => {
-    console.log(tab_id);
     setFormClose();
     setIsTabFormClose();
   };
 
-  const handleDelete = () => {};
+  const handleDelete = (main_id) => {
+    setHtml((prev) => prev.filter((item) => item.id !== main_id))
+  };
 
   return (
     <div>
