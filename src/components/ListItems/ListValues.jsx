@@ -1,12 +1,4 @@
-import React from "react";
-import { useRenderArea } from "../RenderArea";
-
-const ListValues = ({ item, render = false }) => {
-  const {
-    values: { selectedTabAndMainId, isOpen },
-    functions: { setselectedTabAndMainId, setIsOpen, setSelectedData },
-  } = useRenderArea();
-
+const ListValues = ({ item, render = false, setSelectedData }) => {
   const handleSelectedItem = (item) => {
     setSelectedData(item);
   };

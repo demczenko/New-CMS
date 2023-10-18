@@ -7,7 +7,7 @@ import { useRenderArea } from "./RenderArea";
 const RightBar = () => {
   const {
     values: { selectedTabAndMainId, isOpen },
-    functions: { setselectedTabAndMainId, setIsOpen },
+    functions: { setselectedTabAndMainId, setIsOpen, setSelectedData },
   } = useRenderArea();
   const [values, setValues] = useValue();
   const [tabs, setTabs] = useTab();
@@ -54,7 +54,7 @@ const RightBar = () => {
               {valuesByTab !== undefined && (
                 <div className="sticky top-3">
                   {valuesByTab.map((value, id) => (
-                    <ListValues key={id} item={value} render={true} />
+                    <ListValues setSelectedData={setSelectedData} key={id} item={value} render={true} />
                   ))}
                 </div>
               )}

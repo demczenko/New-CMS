@@ -19,11 +19,15 @@ const ListTabs = ({ item }) => {
               className="font-semibold text-base bg-slate-100 p-2 rounded-md capitalize md:ml-4 ml-2">
               {title.value}
               {Array.isArray(value.data) ? (
-                value.data.map((item, id) => (
-                  <p key={id} className="text-sm text-neutral-600 font-normal">
-                    {item}
-                  </p>
-                ))
+                <>
+                  {value.data.map((item, id) => (
+                    <p
+                      key={id}
+                      className="text-sm text-neutral-600 font-normal">
+                      {item}
+                    </p>
+                  ))}
+                </>
               ) : (
                 <p key={id}>{value.data}</p>
               )}

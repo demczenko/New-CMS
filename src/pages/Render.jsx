@@ -26,7 +26,6 @@ const Render = () => {
       setNewTarget,
     },
   } = useRenderArea();
-
   const { id, valueId, type } = selectedData;
 
   const swapText = (node) => {

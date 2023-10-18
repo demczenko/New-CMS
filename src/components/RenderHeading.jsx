@@ -126,7 +126,7 @@ const RenderForm = ({ handleForm }) => {
               viewBox="0 0 16 17"
               fill="none"
               preserveAspectRatio="xMidYMid meet"
-              ariaHidden="true"
+              aria-hidden="true"
               role="img">
               <path
                 fillRule="evenodd"
