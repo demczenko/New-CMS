@@ -40,14 +40,14 @@ const Footer = ({
   };
 
   const handleAddTabValueForm = (tab_id, footer_id) => {
-    markFooterAsUsed(footer_id)
+    markFooterAsUsed(footer_id);
     setTabs((prev) => {
       return prev.map((item) => {
         if (item.id === tab_id) {
           return {
             ...item,
             isSelected: true,
-            footer_id
+            footer_id,
           };
         }
         return item;
@@ -57,23 +57,20 @@ const Footer = ({
     setIsTabFormClose();
   };
 
-
-
   const handleDelete = (footer_id) => {
-
     setTabs((prev) => {
       return prev.map((item) => {
         if (item.footer_id === footer_id) {
           return {
             ...item,
-            footer_id: ""
+            footer_id: "",
           };
         }
         return item;
       });
     });
 
-    setHtml((prev) => prev.filter((item) => item.id !== footer_id))
+    setHtml((prev) => prev.filter((item) => item.id !== footer_id));
   };
 
   return (
@@ -172,7 +169,10 @@ const TabFooterForm = ({ handleForm }) => {
             control={control}
             name="tab_id"
             rules={{
-              required: true
+              required: {
+                value: true,
+                message: "Please select tab",
+              },
             }}
             render={({ field }) => {
               return (
@@ -197,7 +197,10 @@ const TabFooterForm = ({ handleForm }) => {
             control={control}
             name="footer_id"
             rules={{
-              required: true
+              required: {
+                value: true,
+                message: "Please select footer",
+              },
             }}
             render={({ field }) => {
               return (
@@ -216,7 +219,9 @@ const TabFooterForm = ({ handleForm }) => {
             </span>
           )}
         </div>
-        <Button className="md:col-span-1 col-span-4" type="submit">Save</Button>
+        <Button className="md:col-span-1 col-span-4" type="submit">
+          Save
+        </Button>
       </div>
     </form>
   );
