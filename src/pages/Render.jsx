@@ -24,6 +24,8 @@ const Render = () => {
   const { id, type } = selectedData;
   const { tab_id, main_id } = selectedTabAndMainId;
 
+  console.log(targets);
+
   const swapText = (node) => {
     const findTabObj = tabs.find((tab) => tab.id === tab_id);
     const findValueId = findTabObj.data.find(
@@ -33,9 +35,25 @@ const Render = () => {
     node.target.textContent = valueData.data[node.valueId];
   };
 
-  const swapHref = (node) => {};
+  const swapHref = (node) => {
+    const findTabObj = tabs.find((tab) => tab.id === tab_id);
+    const findValueId = findTabObj.data.find(
+      (item) => item.titleId === node.titleId
+    );
+    const valueData = values.find((item) => item.id === findValueId.valueId);
 
-  const swapSrc = (node) => {};
+    node.target.href = valueData.data[node.valueId];
+  };
+
+  const swapSrc = (node) => {
+    const findTabObj = tabs.find((tab) => tab.id === tab_id);
+    const findValueId = findTabObj.data.find(
+      (item) => item.titleId === node.titleId
+    );
+    const valueData = values.find((item) => item.id === findValueId.valueId);
+
+    node.target.src = valueData.data[node.valueId];
+  };
 
   if (node && type) {
     if (type === "link") {
@@ -51,6 +69,7 @@ const Render = () => {
     }
 
     setNewTarget((prev) => [...prev, { ...selectedData, target: node }]);
+    // problem?????
     setNode();
     setSelectedData({ id: "", type: "" });
   }
