@@ -296,7 +296,10 @@ const TabValueForm = ({ handleForm }) => {
             control={control}
             name="tab_id"
             rules={{
-              required: true,
+              required: {
+                value: true,
+                message: "Please select a tab"
+              },
             }}
             render={({ field }) => {
               return (
@@ -321,7 +324,10 @@ const TabValueForm = ({ handleForm }) => {
             control={control}
             name="titleId"
             rules={{
-              required: true,
+              required: {
+                value: true,
+                message: "Please select a title"
+              },
             }}
             render={({ field }) => {
               return (
@@ -345,7 +351,10 @@ const TabValueForm = ({ handleForm }) => {
           <Controller
             control={control}
             rules={{
-              required: true,
+              required: {
+                value: true,
+                message: "Please select a value"
+              },
             }}
             name="valueId"
             render={({ field }) => {

@@ -11,7 +11,7 @@ const ListValues = ({ item }) => {
           return (
             <li
               key={item + id}
-              className="text-sm text-neutral-600 bg-slate-100 p-2 rounded-md capitalize md:ml-4 ml-2">
+              className="text-sm text-neutral-600 bg-slate-50 p-2 rounded-md capitalize md:ml-4 ml-2">
               {item}
             </li>
           );

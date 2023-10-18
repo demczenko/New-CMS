@@ -15,7 +15,7 @@ const Sidebar = () => {
 const SidebarItem = ({ title, to }) => {
   return (
     <li>
-      <Link className="bg-slate-100 rounded-md p-4 block cursor-pointer transition-colors font-semibold hover:bg-slate-50 dark:text-white" to={to}>{title}</Link>
+      <Link className="rounded-md p-2 block cursor-pointer transition-colors font-semibold hover:bg-slate-50 dark:text-white" to={to}>{title}</Link>
     </li>
   );
 };

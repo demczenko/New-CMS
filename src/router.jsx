@@ -31,18 +31,8 @@ const routes = createBrowserRouter([
         element: (
           <RouterGuard>
             <RenderArea>
-              <div className="col-span-full md:col-span-6 py-4">
-                <div className="container mx-auto px-4">
-                  <RenderHeading />
-                  <hr className="my-4" />
-                  <Render />
-                </div>
-              </div>
-              <div className="col-span-full md:col-span-3 py-4">
-                <div className="container h-full mx-auto px-4">
-                  <RightBar />
-                </div>
-              </div>
+              <RenderHeading />
+              <RightBar />
             </RenderArea>
           </RouterGuard>
         ),

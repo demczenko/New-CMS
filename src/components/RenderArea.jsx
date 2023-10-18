@@ -14,9 +14,23 @@ export const useRenderArea = () => {
 
 const RenderArea = ({ children }) => {
   const [selectedTabAndMainId, setselectedTabAndMainId] = useState("");
+  const [isOpen, setIsOpen] = useState("");
+  const [targets, setNewTarget] = useState([]);
 
   return (
-    <RenderAreaContext.Provider value={[selectedTabAndMainId, setselectedTabAndMainId]}>
+    <RenderAreaContext.Provider
+      value={{
+        values: {
+          selectedTabAndMainId,
+          isOpen,
+          targets
+        },
+        functions: {
+          setselectedTabAndMainId,
+          setIsOpen,
+          setNewTarget
+        },
+      }}>
       {children}
     </RenderAreaContext.Provider>
   );

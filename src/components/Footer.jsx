@@ -59,7 +59,22 @@ const Footer = ({
 
 
 
-  const handleDelete = () => {};
+  const handleDelete = (footer_id) => {
+
+    setTabs((prev) => {
+      return prev.map((item) => {
+        if (item.footer_id === footer_id) {
+          return {
+            ...item,
+            footer_id: ""
+          };
+        }
+        return item;
+      });
+    });
+
+    setHtml((prev) => prev.filter((item) => item.id !== footer_id))
+  };
 
   return (
     <div>

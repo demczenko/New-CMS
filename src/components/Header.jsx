@@ -57,7 +57,23 @@ const Header = ({
     setIsTabFormClose();
   };
 
-  const handleDelete = () => {};
+  const handleDelete = (header_id) => {
+
+    setTabs((prev) => {
+      return prev.map((item) => {
+        if (item.header_id === header_id) {
+          return {
+            ...item,
+            header_id: ""
+          };
+        }
+        return item;
+      });
+    });
+
+    setHtml((prev) => prev.filter((item) => item.id !== header_id))
+  };
+
   return (
     <div>
       {isFormOpen && <HeaderForm handleForm={handleForm} />}

@@ -6,63 +6,92 @@ import { useRenderArea } from "../components/RenderArea";
 import { useFooter, useHeader, useMain, useTab } from "../hooks";
 
 const Render = () => {
+  const ref = useRef();
   const [tabs, setTabs] = useTab();
   const [main, setMain] = useMain();
   const [headers, setHeader] = useHeader();
   const [footers, setFooter] = useFooter();
 
-  const [selectedTemplate, setSelectedTemplate] = useRenderArea();
+  const [node, setNode] = useState();
+  const [selectedData, setSelectedData] = useState({ id: 1, type: "href" });
+  const { id, type } = selectedData;
+
+  console.log(node);
+
+  const {
+    values: { selectedTabAndMainId, targets },
+    functions: { setNewTarget },
+  } = useRenderArea();
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    function handleNodeClick(ev) {
+      ev.preventDefault();
+      if (type === "href") {
+        const aTag = ev.target.parentNode;
+        setNode(aTag);
+      } else {
+        setNode(ev.target);
+      }
+    }
+
+    ref.current.addEventListener("click", handleNodeClick);
+    return () => {
+      if (!ref.current) return;
+      ref.current.removeEventListener("click", handleNodeClick);
+    };
+  }, [type]);
 
   if (!main.length) {
-    return null
+    return null;
   }
 
   const mainHtmlTemplateToRender = main.find(
-    (template) => template.id === selectedTemplate.main_id
+    (template) => template.id === selectedTabAndMainId.main_id
   );
   if (mainHtmlTemplateToRender === undefined) {
     return <TemplateNotFound />;
   }
 
   const selectedTab = tabs.find(
-    (tab) => tab.id === selectedTemplate.tab_id
+    (tab) => tab.id === selectedTabAndMainId.tab_id
   );
 
   let headerHtmlTemplateToRender;
   let footerHtmlTemplateToRender;
-  if (selectedTab.hasOwnProperty('footer_id')) {
+  if (selectedTab.hasOwnProperty("footer_id")) {
     footerHtmlTemplateToRender = footers.find(
       (footer) => footer.id === selectedTab.footer_id
     );
   }
 
-  if (selectedTab.hasOwnProperty('header_id')) {
+  if (selectedTab.hasOwnProperty("header_id")) {
     headerHtmlTemplateToRender = headers.find(
       (header) => header.id === selectedTab.header_id
     );
   }
   const getTemplateToRender = () => {
     if (!headerHtmlTemplateToRender && !footerHtmlTemplateToRender) {
-      return mainHtmlTemplateToRender.html
+      return mainHtmlTemplateToRender.html;
     }
     if (headerHtmlTemplateToRender && footerHtmlTemplateToRender) {
-      return headerHtmlTemplateToRender.html + mainHtmlTemplateToRender.html + footerHtmlTemplateToRender.html
+      return (
+        headerHtmlTemplateToRender.html +
+        mainHtmlTemplateToRender.html +
+        footerHtmlTemplateToRender.html
+      );
     }
 
     if (headerHtmlTemplateToRender) {
-      return headerHtmlTemplateToRender.html + mainHtmlTemplateToRender.html
+      return headerHtmlTemplateToRender.html + mainHtmlTemplateToRender.html;
     }
 
     if (footerHtmlTemplateToRender) {
-      return mainHtmlTemplateToRender.html + footerHtmlTemplateToRender.html
+      return mainHtmlTemplateToRender.html + footerHtmlTemplateToRender.html;
     }
-  }
+  };
 
-  // const ref = useRef(null);
-  // const [node, setNode] = useState();
-  // const [targets, setTargets] = useState([]);
-  // const [selectedData, setSelectedData] = useState({ id: 1, type: 'href' });
-  // const { id, type } = selectedData;
   // const isAlreadySwapped = targets.find((item) => item.target === node);
 
   // const handleHrefAttribute = () => {
@@ -189,35 +218,12 @@ const Render = () => {
   //   }
   // }, [targets, selectedTemplate]);
 
-  // useEffect(() => {
-  //   if (!ref.current) return;
 
-  //   function handleNodeClick(ev) {
-  //     if (!type) {
-  //       toast({
-  //         variant: "destructive",
-  //         title: "Firstly select data then place.",
-  //       });
-  //     }
-
-  //     ev.preventDefault();
-  //     if (type === "href") {
-  //       const aTag = ev.target.parentNode;
-  //       setNode(aTag);
-  //     } else {
-  //       setNode(ev.target);
-  //     }
-  //   }
-  //   ref.current.addEventListener("click", handleNodeClick);
-  //   return () => {
-  //     if (!ref.current) return;
-  //     ref.current.removeEventListener("click", handleNodeClick);
-  //   };
-  // }, [id, type]);
 
   return (
     <section>
       <div
+        ref={ref}
         className="bg-gray-200"
         dangerouslySetInnerHTML={{
           __html: getTemplateToRender(),
