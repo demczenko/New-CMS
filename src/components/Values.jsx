@@ -7,6 +7,7 @@ import { List, SelectComponent } from ".";
 import { useTab } from "../hooks/useTab";
 import { useTitle } from "../hooks/useTitle";
 import { Input } from "./ui/input";
+import FieldDescription from "./ui/FieldDescription";
 
 const ValueContent = ({ isFormOpen, setFormClose }) => {
   const [values, setValues] = useValue();
@@ -136,7 +137,7 @@ const ValueForm = ({ handleForm }) => {
       console.log(value_data);
       setError("value_data", {
         message: `${value_type} type you selected doens't fit to content.`,
-      }); 
+      });
     }
   };
 
@@ -207,6 +208,7 @@ const ValueForm = ({ handleForm }) => {
               {errors.value_type.message}
             </span>
           )}
+          <FieldDescription description={"Selected type have impact to what data you can change on HTML template."} />
         </div>
         <div className="col-span-2">
           <Textarea
