@@ -222,10 +222,9 @@ const TabForm = ({ handleForm }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-1 grid grid-cols-4 gap-x-2">
-        <div>
+        <div className="col-span-3 md:col-span-1">
           <Input
             placeholder="Enter tab name..."
-            className="col-span-1"
             {...register("tab_name", {
               required: {
                 value: true,

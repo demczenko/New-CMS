@@ -16,7 +16,7 @@ const TitleContent = ({ isFormOpen, setFormClose }) => {
   const handleForm = ({ title_name }) => {
     const newTitle = {
       id: uuidv4(),
-      type: 'title',
+      type: "title",
       isSelectedOnEveryTab: false,
       isSelected: false,
       value: title_name,
@@ -25,12 +25,12 @@ const TitleContent = ({ isFormOpen, setFormClose }) => {
     setFormClose();
   };
   const handleDelete = (id) => {
-    let valuesId = []
+    let valuesId = [];
     for (const tab of tabs) {
       if (tab.data.length) {
         let result = tab.data.find((item) => item.titleId === id);
         if (result) {
-          valuesId.push(result.valueId)
+          valuesId.push(result.valueId);
         }
       }
     }
@@ -57,7 +57,7 @@ const TitleContent = ({ isFormOpen, setFormClose }) => {
         return item;
       });
     });
-    valuesId = []
+    valuesId = [];
   };
 
   return (
@@ -102,10 +102,9 @@ const TitleForm = ({ titles, handleForm }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-1 grid grid-cols-4 gap-x-2">
-        <div>
+        <div className="col-span-3 md:col-span-1">
           <Input
             placeholder="Enter title name..."
-            className="col-span-1"
             {...register("title_name", {
               required: {
                 value: true,

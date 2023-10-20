@@ -1,4 +1,4 @@
-import { Data, ErrorPage, Render, Template } from "./pages/index.js";
+import { Data, ErrorPage, Template } from "./pages/index.js";
 import App from "./App.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {
@@ -8,6 +8,12 @@ import {
   RouterGuard,
 } from "./components/index.js";
 
+const ROUTES = {
+  data: "data",
+  template: "template",
+  render: "render",
+};
+
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -15,11 +21,11 @@ const routes = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "data",
+        path: ROUTES.data,
         element: <Data />,
       },
       {
-        path: "template",
+        path: ROUTES.template,
         element: (
           <RouterGuard>
             <Template />
@@ -27,7 +33,7 @@ const routes = createBrowserRouter([
         ),
       },
       {
-        path: "render",
+        path: ROUTES.render,
         element: (
           <RouterGuard>
             <RenderArea>

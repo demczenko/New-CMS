@@ -133,18 +133,17 @@ const ValueForm = ({ handleForm }) => {
     }
 
     if (value_type === "text") {
-      // handleForm(data);
-      console.log(value_data);
-      setError("value_data", {
-        message: `${value_type} type you selected doens't fit to content.`,
-      });
+      handleForm(data);
+      // setError("value_data", {
+      //   message: `${value_type} type you selected doens't fit to content.`,
+      // });
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-1 grid grid-cols-4 gap-x-2">
-        <div className="col-span-1">
+        <div className="col-span-2 md:col-span-1">
           <Input
             placeholder="Enter value name..."
             {...register("value_name", {
@@ -168,7 +167,7 @@ const ValueForm = ({ handleForm }) => {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <Controller
             control={control}
             rules={{
@@ -210,7 +209,7 @@ const ValueForm = ({ handleForm }) => {
           )}
           <FieldDescription description={"Selected type have impact to what data you can change on HTML template."} />
         </div>
-        <div className="col-span-2">
+        <div className="col-span-4 mt-2 md:mt-0 md:col-span-2">
           <Textarea
             rows={6}
             placeholder="Enter values..."
@@ -232,7 +231,7 @@ const ValueForm = ({ handleForm }) => {
             </span>
           )}
         </div>
-        <Button type="submit">Save</Button>
+        <Button className="md:mt-0 mt-2" type="submit">Save</Button>
       </div>
     </form>
   );

@@ -19,7 +19,7 @@ const List = ({ items, title, subtitle, handleDelete }) => {
 
 
   return (
-    <div className="mt-6">
+    <div className="md:mt-6 mt-4">
       {title && <Heading title={title} subtitle={subtitle} />}
       <ul className="md:space-y-6 space-y-2 mt-4">
         {items.map((item) => (
