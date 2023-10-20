@@ -16,7 +16,6 @@ const Render = () => {
 
   const [headers, setHeader] = useHeader();
   const [footers, setFooter] = useFooter();
-
   const {
     values: { selectedTabAndMainId, selectedData, targets },
     functions: { setNewTarget, setSelectedData },
@@ -53,19 +52,20 @@ const Render = () => {
     node.target.src = valueData.data[node.valueId];
   };
 
-  if (node && type) {
-    if (type === "link") {
-      if (!handleHrefAttribute()) {
-        return;
-      }
-    }
 
-    if (type === "image") {
-      if (!handleSrcAttribute()) {
-        return;
-      }
+  if (type === "href") {
+    if (!handleHrefAttribute()) {
+      return;
     }
+  }
 
+  if (type === "scr") {
+    if (!handleSrcAttribute()) {
+      return;
+    }
+  }
+
+  if (node) {
     setNewTarget((prev) => [...prev, { ...selectedData, target: node }]);
     // problem?????
     setNode();
@@ -95,8 +95,12 @@ const Render = () => {
 
     function handleNodeClick(ev) {
       ev.preventDefault();
-      setNode(ev.target);
-      toast.success("Node selected.");
+      if (type !== undefined) {
+        setNode(ev.target);
+        toast.success("Swapped successfully.");
+      } else {
+        toast.error("Firstly select data.");
+      }
     }
 
     ref.current.addEventListener("click", handleNodeClick);
@@ -104,7 +108,7 @@ const Render = () => {
       if (!ref.current) return;
       ref.current.removeEventListener("click", handleNodeClick);
     };
-  }, [tab_id]);
+  }, [tab_id, type]);
 
   const mainHtmlTemplateToRender = useMemo(() => {
     if (!main_id) {
