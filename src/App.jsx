@@ -22,7 +22,7 @@ const App = () => {
           </Button>
           {isOpen && <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)}/>}
         </div>
-        {pathname === "/render" ? (
+        {pathname === "/cms/render" ? (
           <Outlet />
         ) : (
           <div className="col-span-10 md:col-span-9 py-4">

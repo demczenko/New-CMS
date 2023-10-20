@@ -6,7 +6,7 @@ export default function ErrorPage() {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate("/data");
+    navigate("/cms/data");
   }
   return (
     <div id="error-page" className="flex items-center justify-center flex-col h-full gap-4">

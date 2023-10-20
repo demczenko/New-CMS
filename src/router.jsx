@@ -16,7 +16,7 @@ const ROUTES = {
 
 const routes = createBrowserRouter([
   {
-    path: "/",
+    path: "/cms",
     element: <App />,
     errorElement: <ErrorPage />,
     children: [

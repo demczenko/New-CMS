@@ -68,19 +68,19 @@ const TemplateRouterGuard = ({ children }) => {
   useEffect(() => {
     if (!titles.length) {
       toast.error("No titles found.");
-      return navigate("/data");
+      return navigate("/cms/data");
     }
 
     if (pathname === "/render") {
       if (!main.length) {
         toast.error("No templates found.");
-        return navigate("/template");
+        return navigate("/cms/template");
       }
     }
 
     if (!titles.length) {
       toast.error("No titles found.");
-      return navigate("/data");
+      return navigate("/cms/data");
     }
 
     if (!isEveryFooterAndHeaderSelected()) {
@@ -96,13 +96,13 @@ const TemplateRouterGuard = ({ children }) => {
       toast.error(
         "Please, select every value."
       );
-      return navigate("/data");
+      return navigate("/cms/data");
     }
 
     if (titles.lengt >= 1) {
       if (!isEveryTitleHasBeenAddedToEveryTab()) {
         toast.error("Add every title to tab.");
-        return navigate("/data");
+        return navigate("/cms/data");
       }
     }
   }, []);
