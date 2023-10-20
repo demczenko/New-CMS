@@ -10,7 +10,7 @@ const ListTabs = ({ item }) => {
         Data for {item.value}
       </summary>
       <ul className="space-y-2">
-        {item.data.map((elem) => {
+        {item.data.map((elem, id) => {
           const title = titles.find((title) => title.id === elem.titleId);
           const value = values.find((value) => value.id === elem.valueId);
           return (
@@ -18,11 +18,13 @@ const ListTabs = ({ item }) => {
               key={elem.id}
               className="font-semibold text-base bg-slate-100 p-2 rounded-md capitalize md:ml-4 ml-2">
               {title.value}
-              {value.data.map((item, id) => (
-                <p key={id} className="text-sm text-neutral-600 font-normal">
-                  {item}
-                </p>
-              ))}
+              <div key={id}>
+                {value.data.map((item, id) => (
+                  <p key={id} className="text-sm text-neutral-600 font-normal">
+                    {item}
+                  </p>
+                ))}
+              </div>
             </li>
           );
         })}

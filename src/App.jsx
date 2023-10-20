@@ -26,7 +26,7 @@ const App = () => {
           <Outlet />
         ) : (
           <div className="col-span-10 md:col-span-9 py-4">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto md:px-4 px-1">
               <Outlet />
             </div>
           </div>

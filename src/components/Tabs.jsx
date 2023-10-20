@@ -289,8 +289,8 @@ const TabValueForm = ({ handleForm }) => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="p-1 grid grid-cols-4 gap-x-2">
-        <div>
+      <div className="p-1 grid grid-cols-4 mt:gap-x-2 gap-2">
+        <div className="col-span-2 md:col-span-1">
           <Controller
             control={control}
             name="tab_id"
@@ -318,7 +318,7 @@ const TabValueForm = ({ handleForm }) => {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <Controller
             control={control}
             name="titleId"
@@ -346,7 +346,7 @@ const TabValueForm = ({ handleForm }) => {
             </span>
           )}
         </div>
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <Controller
             control={control}
             rules={{
@@ -374,7 +374,7 @@ const TabValueForm = ({ handleForm }) => {
             </span>
           )}
         </div>
-        <Button type="submit">Save</Button>
+        <Button className="col-span-2 md:col-span-1" type="submit">Save</Button>
       </div>
     </form>
   );

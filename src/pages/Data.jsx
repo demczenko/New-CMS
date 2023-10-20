@@ -48,7 +48,7 @@ const Data = () => {
                 <Button
                   className="py-1 px-2 md:py-2 md:px-4 text-sm"
                   onClick={handleLinkTabsAndValuesClick}>
-                  Link tab and value
+                  Link data
                 </Button>
               )}
             </>
