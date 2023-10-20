@@ -34,7 +34,7 @@ const Data = () => {
 
   return (
     <section>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center md:mb-6 mb-4">
         <Heading title="Data" />
         <div className="space-x-2">
           <Button
