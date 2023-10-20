@@ -96,17 +96,48 @@ const ValueContent = ({ isFormOpen, setFormClose }) => {
     </div>
   );
 };
+let expression =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+let regex = new RegExp(expression);
 
 const ValueForm = ({ handleForm }) => {
   const {
     register,
     handleSubmit,
+    setError,
     control,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    handleForm(data);
+    const { value_type, value_data } = data;
+    if (value_type === "src") {
+      if (value_data.match(regex)) {
+        handleForm(data);
+      } else {
+        setError("value_data", {
+          message: `${value_type} type you selected doens't fit to content.`,
+        });
+      }
+    }
+
+    if (value_type === "href") {
+      if (value_data.match(regex)) {
+        handleForm(data);
+      } else {
+        setError("value_data", {
+          message: `${value_type} type you selected doens't fit to content.`,
+        });
+      }
+    }
+
+    if (value_type === "text") {
+      // handleForm(data);
+      console.log(value_data);
+      setError("value_data", {
+        message: `${value_type} type you selected doens't fit to content.`,
+      }); 
+    }
   };
 
   return (
@@ -156,16 +187,16 @@ const ValueForm = ({ handleForm }) => {
                   items={[
                     {
                       id: "href",
-                      value: "href"
+                      value: "href",
                     },
                     {
                       id: "src",
-                      value: "src"
+                      value: "src",
                     },
                     {
                       id: "text",
-                      value: "text"
-                    }
+                      value: "text",
+                    },
                   ]}
                 />
               );
