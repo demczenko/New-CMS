@@ -32,7 +32,7 @@ const Template = () => {
   };
   return (
     <section>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center md:mb-6 mb-4">
         <Heading title="Templates" />
         <HeaderActions activeTab={activeTab} handleLinkTabsAndValuesClick={handleLinkTabsAndValuesClick} handleAddClick={handleAddClick}/>
       </div>

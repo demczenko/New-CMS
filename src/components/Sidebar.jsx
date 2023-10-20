@@ -12,7 +12,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   return (
     <nav>
       {isOpen ? (
-        <ul className="space-y-2 p-4 absolute inset-0 bg-white/60 backdrop-blur-sm">
+        <ul className="space-y-2 p-4 absolute z-10 inset-0 bg-white/60 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <span className="text-xl font-semibold text-neutral-800">
               Navigation

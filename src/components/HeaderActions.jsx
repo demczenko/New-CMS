@@ -1,4 +1,4 @@
-import { useMain, useTab } from "../hooks";
+import { useFooter, useHeader, useMain, useTab } from "../hooks";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -17,6 +17,8 @@ const HeaderActions = ({
 }) => {
   const [tabs, setTabs] = useTab();
   const [mains, setHtml] = useMain();
+  const [footer, setFooter] = useFooter();
+  const [header, setHeader] = useHeader();
 
   return (
     <>
@@ -56,13 +58,17 @@ const HeaderActions = ({
               </Button>
             </DropdownMenuItem>
             {(activeTab === "header" || activeTab === "footer") && (
-              <DropdownMenuItem asChild>
-                <Button
-                  className="py-1 px-2 md:py-2 md:px-4 text-sm rounded-md"
-                  onClick={handleLinkTabsAndValuesClick}>
-                  Link {activeTab}
-                </Button>
-              </DropdownMenuItem>
+              <>
+                {header.length > 0 && footer.length > 0 && (
+                  <DropdownMenuItem asChild>
+                    <Button
+                      className="py-1 px-2 md:py-2 md:px-4 text-sm rounded-md"
+                      onClick={handleLinkTabsAndValuesClick}>
+                      Link {activeTab}
+                    </Button>
+                  </DropdownMenuItem>
+                )}
+              </>
             )}
           </DropdownMenuGroup>
         </DropdownMenuContent>

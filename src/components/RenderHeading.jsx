@@ -18,10 +18,10 @@ const RenderHeading = () => {
 
   return (
     <div
-      className={`col-span-full ${
-        isOpen ? "md:col-span-6" : "md:col-span-8"
+      className={`col-span-9 ${
+        isOpen ? "md:col-span-8" : "md:col-span-9"
       } py-4`}>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto md:px-4 px-1">
         <div className="sticky top-2">
           <div className="flex justify-between items-center mb-4">
             <Heading title="Render" />

@@ -25,6 +25,10 @@ const RightBar = () => {
     setIsOpen(true);
   };
 
+  if (selectedTab === undefined) {
+    return null;
+  }
+
   return (
     <>
       {!isOpen && (
@@ -36,7 +40,53 @@ const RightBar = () => {
         </div>
       )}
       {isOpen && (
-        <div className="col-span-full md:col-span-3 py-4">
+        <div className="col-span-full md:col-span-3 py-4 md:block hidden">
+          <div className="container h-full mx-auto px-4">
+            <div className="relative h-full">
+              <div className="flex justify-between items-center mb-6">
+                <Heading title={"Select values"} />
+                <MenuIcon
+                  onClick={handleMenuClose}
+                  className="cursor-pointer"
+                />
+              </div>
+              {!selectedTabAndMainId.hasOwnProperty("tab_id") && (
+                <p className="text-base text-neutral-300 font-semibold -z-10 flex items-center justify-center inset-0 absolute">
+                  Please select node...
+                </p>
+              )}
+              <hr className="my-4" />
+              <div className="sticky top-3">
+                {selectedTab.data.map((item) => {
+                  const getTitleById = () => {
+                    return titles.find((title) => title.id === item.titleId);
+                  };
+
+                  const getValueById = () => {
+                    return values.find((value) => value.id === item.valueId);
+                  };
+
+                  return (
+                    <div key={item.id}>
+                      <h3 className="text-2xl font-medium">
+                        {getTitleById().value}
+                      </h3>
+                      <ListValues
+                        setSelectedData={setSelectedData}
+                        item={getValueById()}
+                        titleId={getTitleById().id}
+                        render={true}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isOpen && (
+        <div className="col-span-full md:col-span-3 py-4 md:hidden block absolute bg-white/60 backdrop-blur-sm inset-0">
           <div className="container h-full mx-auto px-4">
             <div className="relative h-full">
               <div className="flex justify-between items-center mb-6">

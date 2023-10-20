@@ -24,8 +24,6 @@ const Render = () => {
   const { id, type } = selectedData;
   const { tab_id, main_id } = selectedTabAndMainId;
 
-  console.log(targets);
-
   const swapText = (node) => {
     const findTabObj = tabs.find((tab) => tab.id === tab_id);
     const findValueId = findTabObj.data.find(

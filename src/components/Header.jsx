@@ -102,7 +102,7 @@ const HeaderForm = ({ handleForm }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-1 grid grid-cols-4 gap-x-2">
-        <div className="col-span-1">
+        <div className="md:col-span-1 col-span-4 mb-2 md:mb-0">
           <Input
             placeholder="Enter header name..."
             {...register("header_name", {
@@ -129,7 +129,7 @@ const HeaderForm = ({ handleForm }) => {
         <Textarea
           rows={30}
           placeholder="Enter header html template..."
-          className="max-h-[800px] col-span-2"
+          className="max-h-[800px] col-span-4 md:col-span-3 mb-2 md:mb-0"
           {...register("html", {
             required: {
               value: true,
@@ -144,7 +144,7 @@ const HeaderForm = ({ handleForm }) => {
         {errors.html && (
           <span className="text-red-300 text-sm">{errors.html.message}</span>
         )}
-        <Button type="submit">Save</Button>
+        <Button className="md:col-span-1 col-span-4" type="submit">Save</Button>
       </div>
     </form>
   );
