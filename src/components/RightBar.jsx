@@ -40,7 +40,7 @@ const RightBar = () => {
         </div>
       )}
       {isOpen && (
-        <div className="col-span-full md:col-span-3 py-4 md:block hidden">
+        <div className="col-span-full md:col-span-3 py-4 xl:block hidden">
           <div className="container h-full mx-auto px-4">
             <div className="relative h-full">
               <div className="flex justify-between items-center mb-6">
@@ -86,7 +86,7 @@ const RightBar = () => {
         </div>
       )}
       {isOpen && (
-        <div className="col-span-full md:col-span-3 py-4 md:hidden block absolute bg-white/60 backdrop-blur-sm inset-0">
+        <div className="col-span-full md:col-span-3 py-4 xl:hidden block absolute bg-white/60 backdrop-blur-sm inset-0">
           <div className="container h-full mx-auto px-4">
             <div className="relative h-full">
               <div className="flex justify-between items-center mb-6">
