@@ -120,7 +120,7 @@ const FooterForm = ({ handleForm }) => {
             })}
           />
           {errors.footer_name && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.footer_name.message}
             </span>
           )}
@@ -141,7 +141,7 @@ const FooterForm = ({ handleForm }) => {
           })}
         />
         {errors.html && (
-          <span className="text-red-300 text-sm">{errors.html.message}</span>
+          <span className="text-red-300 text-xs">{errors.html.message}</span>
         )}
         <Button className="md:col-span-1 col-span-4" type="submit">Save</Button>
       </div>
@@ -187,7 +187,7 @@ const TabFooterForm = ({ handleForm }) => {
             }}
           />
           {errors.tab_id && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.tab_id.message}
             </span>
           )}
@@ -214,7 +214,7 @@ const TabFooterForm = ({ handleForm }) => {
             }}
           />
           {errors.footer_id && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.footer_id.message}
             </span>
           )}

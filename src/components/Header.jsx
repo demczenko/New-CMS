@@ -121,7 +121,7 @@ const HeaderForm = ({ handleForm }) => {
             })}
           />
           {errors.header_name && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.header_name.message}
             </span>
           )}
@@ -142,7 +142,7 @@ const HeaderForm = ({ handleForm }) => {
           })}
         />
         {errors.html && (
-          <span className="text-red-300 text-sm">{errors.html.message}</span>
+          <span className="text-red-300 text-xs">{errors.html.message}</span>
         )}
         <Button className="md:col-span-1 col-span-4" type="submit">Save</Button>
       </div>
@@ -188,7 +188,7 @@ const TabHeaderForm = ({ handleForm }) => {
             }}
           />
           {errors.tab_id && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.tab_id.message}
             </span>
           )}
@@ -215,7 +215,7 @@ const TabHeaderForm = ({ handleForm }) => {
             }}
           />
           {errors.header_id && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.header_id.message}
             </span>
           )}

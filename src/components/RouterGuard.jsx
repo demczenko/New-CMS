@@ -85,7 +85,7 @@ const TemplateRouterGuard = ({ children }) => {
 
     if (!isEveryFooterAndHeaderSelected()) {
       toast.error("Not every footer and header has been selected.");
-      return navigate("/template");
+      return navigate("/cms/template");
     }
 
     let result;
@@ -94,7 +94,7 @@ const TemplateRouterGuard = ({ children }) => {
     });
     if (!result) {
       toast.error(
-        "Please, select every value."
+        "Every tab should have value."
       );
       return navigate("/cms/data");
     }

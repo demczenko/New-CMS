@@ -162,7 +162,7 @@ const ValueForm = ({ handleForm }) => {
             })}
           />
           {errors.value_name && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.value_name.message}
             </span>
           )}
@@ -202,12 +202,18 @@ const ValueForm = ({ handleForm }) => {
               );
             }}
           />
-          {errors.value_type && (
-            <span className="text-red-300 text-sm">
-              {errors.value_type.message}
-            </span>
-          )}
-          <FieldDescription description={"Selected type have impact to what data you can change on HTML template."} />
+          <div className="flex justify-between">
+            {errors.value_type && (
+              <span className="text-red-300 text-xs">
+                {errors.value_type.message}
+              </span>
+            )}
+            <FieldDescription
+              description={
+                "Selected type affects on data change on HTML template."
+              }
+            />
+          </div>
         </div>
         <div className="col-span-4 mt-2 md:mt-0 md:col-span-2">
           <Textarea
@@ -226,12 +232,14 @@ const ValueForm = ({ handleForm }) => {
             })}
           />
           {errors.value_data && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.value_data.message}
             </span>
           )}
         </div>
-        <Button className="md:mt-0 mt-2" type="submit">Save</Button>
+        <Button className="md:mt-0 mt-2" type="submit">
+          Save
+        </Button>
       </div>
     </form>
   );

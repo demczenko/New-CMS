@@ -278,14 +278,37 @@ const TabValueForm = ({ handleForm }) => {
       }
     }
   };
+
+  const isSelectedValueDataTypeEqualsToSelectedTitleType = (titleId, valueId) => {
+    const selectedTitle = titles.find(title => title.id === titleId)
+    const selectedValue = values.find(value => value.id === valueId)
+
+    if (selectedTitle.dataType === selectedValue.dataType) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   const onSubmit = ({ tab_id, titleId, valueId }) => {
     if (isTabAlreadyHaveSelectedTitle(tab_id, titleId)) {
       setError("titleId", {
         message: "Title already taken by this tab.",
       });
-    } else {
-      handleForm(tab_id, titleId, valueId);
+      return
     }
+
+    if (!isSelectedValueDataTypeEqualsToSelectedTitleType(titleId, valueId)) {
+      setError("titleId", {
+        message: "Selected title data type is not equal to selected value data type",
+      });
+      setError("valueId", {
+        message: "Selected value data type is not equal to selected title data type",
+      });
+      return
+    }
+
+    handleForm(tab_id, titleId, valueId);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -341,7 +364,7 @@ const TabValueForm = ({ handleForm }) => {
             }}
           />
           {errors.titleId && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.titleId.message}
             </span>
           )}
@@ -369,7 +392,7 @@ const TabValueForm = ({ handleForm }) => {
             }}
           />
           {errors.valueId && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.valueId.message}
             </span>
           )}

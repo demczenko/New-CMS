@@ -79,7 +79,7 @@ const MainForm = ({ handleForm }) => {
             })}
           />
           {errors.main_name && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.main_name.message}
             </span>
           )}
@@ -100,7 +100,7 @@ const MainForm = ({ handleForm }) => {
           })}
         />
         {errors.html && (
-          <span className="text-red-300 text-sm">{errors.html.message}</span>
+          <span className="text-red-300 text-xs">{errors.html.message}</span>
         )}
         <Button className="md:col-span-1 col-span-4" type="submit">Save</Button>
       </div>
@@ -141,7 +141,7 @@ const TabMainForm = ({ handleForm }) => {
             }}
           />
           {errors.tab_id && (
-            <span className="text-red-300 text-sm">
+            <span className="text-red-300 text-xs">
               {errors.tab_id.message}
             </span>
           )}

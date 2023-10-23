@@ -52,7 +52,6 @@ const Render = () => {
     node.target.src = valueData.data[node.valueId];
   };
 
-
   if (type === "href") {
     if (!handleHrefAttribute()) {
       return;
@@ -65,12 +64,14 @@ const Render = () => {
     }
   }
 
-  if (node) {
-    setNewTarget((prev) => [...prev, { ...selectedData, target: node }]);
-    // problem?????
-    setNode();
-    setSelectedData({ id: "", type: "" });
-  }
+  useEffect(() => {
+    if (node) {
+      setNewTarget((prev) => [...prev, { ...selectedData, target: node }]);
+      // problem?????
+      setNode();
+      setSelectedData({ id: "", type: "" });
+    }
+  }, [node, selectedData, setNewTarget, setNode, setSelectedData]);
 
   if (targets.length) {
     for (const key in targets) {
