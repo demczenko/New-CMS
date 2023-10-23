@@ -21,7 +21,7 @@ const List = ({ items, title, subtitle, handleDelete }) => {
   return (
     <div className="md:mt-6 mt-4">
       {title && <Heading title={title} subtitle={subtitle} />}
-      <ul className="md:space-y-6 space-y-2 mt-4">
+      <ul className="space-y-2 mt-4">
         {items.map((item) => (
           <div key={item.id}>
             <li className="font-semibold text-base md:text-xl relative bg-slate-100 p-4 rounded-md capitalize pr-24 mb-2">
@@ -71,8 +71,8 @@ const List = ({ items, title, subtitle, handleDelete }) => {
                 )}
               </div>
             </li>
-            {item.type === "tab" && item.data.length > 0 && <ListTabs item={item} />}
-            {item.type === "value" && item.data.length > 0 && <ListValues item={item} />}
+            {item.type === "tab" && item.data.length > 0 && <ListTabs item={item} key={item.id}/>}
+            {item.type === "value" && item.data.length > 0 && <ListValues item={item} key={item.id}/>}
           </div>
         ))}
       </ul>

@@ -5,6 +5,8 @@ import { HREF_TAGS } from "../constance/HREF_TAGS";
 import { useRenderArea } from "../components/RenderArea";
 import { useFooter, useHeader, useMain, useTab, useValue } from "../hooks";
 import { toast } from "react-hot-toast";
+import { X } from "lucide-react";
+import { Button } from "../components/ui/button";
 
 const Render = () => {
   const [node, setNode] = useState();
@@ -24,6 +26,7 @@ const Render = () => {
   const { tab_id, main_id } = selectedTabAndMainId;
 
   const swapText = (node) => {
+    console.log(node);
     const findTabObj = tabs.find((tab) => tab.id === tab_id);
     const findValueId = findTabObj.data.find(
       (item) => item.titleId === node.titleId
@@ -52,27 +55,73 @@ const Render = () => {
     node.target.src = valueData.data[node.valueId];
   };
 
-  if (type === "href") {
-    if (!handleHrefAttribute()) {
-      return;
+  const handleHrefAttribute = (node) => {
+    const findANodes = () => {
+      const closest = node.closest("a");
+      if (closest && closest.nodeName.toLowerCase() === "a") {
+        setNode(closest);
+      }
+    };
+    if (!HREF_TAGS.includes(node.nodeName.toLowerCase())) {
+      toast((t) => (
+        <div className="flex flex-col gap-2 items-center">
+          <span>Href attribute is not valid for {node.nodeName} tag</span>
+          <div className="flex gap-2">
+            <Button
+              className="py-1 px-2"
+              variant="destructive"
+              onClick={() => toast.dismiss(t.id)}>
+              Close
+            </Button>
+            <Button
+              className="py-1 px-2"
+              variant="outline"
+              onClick={findANodes}>
+              Find closest
+            </Button>
+          </div>
+        </div>
+      ));
     }
-  }
+  };
 
-  if (type === "scr") {
-    if (!handleSrcAttribute()) {
-      return;
+  const handleSrcAttribute = (node) => {
+    const findImgNodes = () => {
+      const closest = node.closest("img");
+      if (closest && closest.nodeName.toLowerCase() === "img") {
+        setNode(closest);
+      }
+    };
+    if (!SRC_TAGS.includes(node.nodeName.toLowerCase())) {
+      toast((t) => (
+        <div className="flex flex-col gap-2 items-center">
+          <span>Href attribute is not valid for {node.nodeName} tag</span>
+          <div className="flex gap-2">
+            <Button
+              className="py-1 px-2"
+              variant="destructive"
+              onClick={() => toast.dismiss(t.id)}>
+              Close
+            </Button>
+            <Button
+              className="py-1 px-2"
+              variant="outline"
+              onClick={findImgNodes}>
+              Find closest
+            </Button>
+          </div>
+        </div>
+      ));
     }
-  }
+  };
 
   useEffect(() => {
     if (node) {
       setNewTarget((prev) => [...prev, { ...selectedData, target: node }]);
-      // problem?????
       setNode();
       setSelectedData({ id: "", type: "" });
     }
   }, [node, selectedData, setNewTarget, setNode, setSelectedData]);
-
   if (targets.length) {
     for (const key in targets) {
       const node = targets[key];
@@ -89,6 +138,9 @@ const Render = () => {
         swapSrc(node);
       }
     }
+    if (node) {
+      toast.success("Swapped successfully.");
+    }
   }
 
   useEffect(() => {
@@ -97,8 +149,17 @@ const Render = () => {
     function handleNodeClick(ev) {
       ev.preventDefault();
       if (type !== undefined) {
+        if (type === "href") {
+          handleHrefAttribute(ev.target);
+          return;
+        }
+
+        if (type === "scr") {
+          handleSrcAttribute(ev.target);
+          return;
+        }
         setNode(ev.target);
-        toast.success("Swapped successfully.");
+        toast.success("Node selected.");
       } else {
         toast.error("Firstly select data.");
       }
@@ -137,21 +198,6 @@ const Render = () => {
       (header) => header.id === selectedTab.header_id
     );
   }
-  const handleHrefAttribute = () => {
-    if (!HREF_TAGS.includes(node.nodeName.toLowerCase())) {
-      toast.error(`Href attribute is not acceptable for ${node.nodeName} tag`);
-      return false;
-    }
-    return true;
-  };
-
-  const handleSrcAttribute = () => {
-    if (!SRC_TAGS.includes(node.nodeName.toLowerCase())) {
-      toast.error(`Src attribute is not acceptable for ${node.nodeName} tag`);
-      return false;
-    }
-    return true;
-  };
 
   return (
     <section>

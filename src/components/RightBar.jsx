@@ -56,7 +56,7 @@ const RightBar = () => {
                 </p>
               )}
               <hr className="my-4" />
-              <div className="sticky top-3">
+              <div className="sticky top-3" key={'render data'}>
                 {selectedTab.data.map((item) => {
                   const getTitleById = () => {
                     return titles.find((title) => title.id === item.titleId);

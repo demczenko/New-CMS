@@ -126,7 +126,7 @@ const FooterForm = ({ handleForm }) => {
           )}
         </div>
         <Textarea
-          rows={30}
+          rows={20}
           placeholder="Enter footer html template..."
           className="max-h-[800px] col-span-4 md:col-span-2 mb-2 md:mb-0"
           {...register("html", {

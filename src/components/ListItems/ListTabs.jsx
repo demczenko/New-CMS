@@ -16,7 +16,7 @@ const ListTabs = ({ item }) => {
           return (
             <li
               key={elem.id}
-              className="font-semibold text-base bg-slate-100 p-2 rounded-md capitalize md:ml-4 ml-2">
+              className="font-semibold text-base bg-slate-100 p-2 rounded-md md:ml-4 ml-2">
               {title.value}
               <div key={id}>
                 {value.data.map((item, id) => (
