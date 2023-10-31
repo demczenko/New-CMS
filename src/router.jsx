@@ -1,6 +1,10 @@
 import { Data, ErrorPage, Template } from "./pages/index.js";
 import App from "./App.jsx";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import {
   RenderArea,
   RenderHeading,
@@ -16,9 +20,13 @@ const ROUTES = {
 
 const routes = createBrowserRouter([
   {
+    path: "/",
+    element: <Navigate to={"/cms"} />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/cms",
     element: <App />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: ROUTES.data,

@@ -40,47 +40,71 @@ const TemplateRouterGuard = ({ children }) => {
     return result;
   };
 
-  const isEveryTabWithTheSameTitleIdHasTheSameValueLength = (titleId) => {
-    const filterValueIds = [];
+  const isEveryTabHasTheSameDataLength = () => {
+    let titlesId = [];
     for (let tab of tabs) {
-      const result = tab.data.find((item) => item.titleId === titleId);
-      if (result !== undefined) {
-        filterValueIds.push(result.valueId);
-      } else {
-        return false
-      }
+      const titleIds = tab.data.map((tab) => tab.titleId)
+      titlesId.push(titleIds);
     }
 
-    const filterValues = [];
-    for (let id of filterValueIds) {
-      for (let obj of values) {
-        if (obj.id === id) {
-          filterValues.push(obj);
+    const length = titlesId.map(item => item.length)
+    const first = length[0]
+    return length.every(item => item === first)
+  }
+
+
+  const isEveryTabWithTheSameTitleIdHasTheSameValueLength = () => {
+    let titlesAndValuesId = [];
+    for (let tab of tabs) {
+      titlesAndValuesId.push(...tab.data.map((tab) => tab));
+    }
+
+    const tabsValuesLength = []
+    for (const title of titles) {
+
+      const valuesLength = []
+      for (const {titleId, valueId} of titlesAndValuesId) {
+        if (title.id === titleId) {
+          valuesLength.push(values.find(value => value.id === valueId).data.length)
         }
       }
+      const first = valuesLength[0]
+      tabsValuesLength.push(valuesLength.every(value => value === first))
     }
 
-    const filterValuesLength = filterValues.map((item) => item.data.length);
-    const firstItem = filterValuesLength[0];
-    return filterValuesLength.every((item) => item === firstItem);
+    return tabsValuesLength.every(value => value === true)
   };
 
+  const isEveryValueSelected = () => {
+    const valuesSelected = values.map((item) => item.isSelected);
+    return valuesSelected.every((isSelected) => isSelected === true);
+  };
   useEffect(() => {
     if (!titles.length) {
       toast.error("No titles found.");
       return navigate("/cms/data");
     }
 
-    if (pathname === "/render") {
-      if (!main.length) {
-        toast.error("No templates found.");
-        return navigate("/cms/template");
-      }
+    if (!isEveryValueSelected()) {
+      toast.error("Every value should be selected.");
+      return navigate("/cms/data");
+    }
+    
+    if (!isEveryTabHasTheSameDataLength()) {
+      toast.error("Every tab should have the same amount of selected values.");
+      return navigate("/cms/data");
     }
 
-    if (!titles.length) {
-      toast.error("No titles found.");
+    if (!isEveryTabWithTheSameTitleIdHasTheSameValueLength()) {
+      toast.error("Every tab should have the same value length.");
       return navigate("/cms/data");
+    }
+
+    if (titles.length >= 2) {
+      if (!isEveryTitleHasBeenAddedToEveryTab()) {
+        toast.error("Add every title to tab.");
+        return navigate("/cms/data");
+      }
     }
 
     if (!isEveryFooterAndHeaderSelected()) {
@@ -88,24 +112,14 @@ const TemplateRouterGuard = ({ children }) => {
       return navigate("/cms/template");
     }
 
-    let result;
-    titles.forEach((tab) => {
-      result = isEveryTabWithTheSameTitleIdHasTheSameValueLength(tab.id);
-    });
-    if (!result) {
-      toast.error(
-        "Every tab should have value."
-      );
-      return navigate("/cms/data");
-    }
-
-    if (titles.lengt >= 1) {
-      if (!isEveryTitleHasBeenAddedToEveryTab()) {
-        toast.error("Add every title to tab.");
-        return navigate("/cms/data");
+    if (pathname === "/cms/render") {
+      if (!main.length) {
+        toast.error("No templates found.");
+        return navigate("/cms/template");
       }
     }
-  }, []);
+  }, [pathname]);
+
   return <>{children}</>;
 };
 

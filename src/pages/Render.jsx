@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Heading, TemplateNotFound } from "../components";
+import { TemplateNotFound } from "../components";
 import { SRC_TAGS } from "../constance/SRC_TAGS";
 import { HREF_TAGS } from "../constance/HREF_TAGS";
 import { useRenderArea } from "../components/RenderArea";
 import { useFooter, useHeader, useMain, useTab, useValue } from "../hooks";
 import { toast } from "react-hot-toast";
-import { X } from "lucide-react";
 import { Button } from "../components/ui/button";
 
 const Render = () => {
@@ -26,7 +25,6 @@ const Render = () => {
   const { tab_id, main_id } = selectedTabAndMainId;
 
   const swapText = (node) => {
-    console.log(node);
     const findTabObj = tabs.find((tab) => tab.id === tab_id);
     const findValueId = findTabObj.data.find(
       (item) => item.titleId === node.titleId

@@ -16,21 +16,21 @@ const App = () => {
         <div className="col-span-full md:col-span-3 p-4 hidden lg:block">
           <Sidebar />
         </div>
-        <div className="col-span-2 md:col-span-1 p-4 block lg:hidden">
-          <Button className="p-2" onClick={() => setIsOpen(!isOpen)}>
-            <MenuIcon />
-          </Button>
-          {isOpen && <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)}/>}
-        </div>
-        {pathname === "/cms/render" ? (
-          <Outlet />
-        ) : (
-          <div className="col-span-10 md:col-span-9 py-4">
-            <div className="container mx-auto md:px-4 px-1">
+        <div className="col-span-10 md:col-span-9 py-4">
+          <div className="container mx-auto md:px-4 px-1 flex">
+            <div className="p-2 block lg:hidden">
+              <Button className="p-2" onClick={() => setIsOpen(!isOpen)}>
+                <MenuIcon />
+              </Button>
+              {isOpen && (
+                <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
+              )}
+            </div>
+            <div className="grow">
               <Outlet />
             </div>
           </div>
-        )}
+        </div>
       </main>
     </>
   );
