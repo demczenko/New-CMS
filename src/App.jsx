@@ -1,8 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { Sidebar } from "./components";
 import { Toaster } from "react-hot-toast";
-import { MenuIcon } from "lucide-react";
-import { Button } from "./components/ui/button";
 import { useState } from "react";
 
 const App = () => {
@@ -12,23 +10,11 @@ const App = () => {
   return (
     <>
       <Toaster />
-      <main className="grid grid-cols-12 min-h-screen relative">
-        <div className="col-span-full md:col-span-3 p-4 hidden lg:block">
-          <Sidebar />
-        </div>
-        <div className="col-span-10 md:col-span-9 py-4">
-          <div className="container mx-auto md:px-4 px-1 flex">
-            <div className="p-2 block lg:hidden">
-              <Button className="p-2" onClick={() => setIsOpen(!isOpen)}>
-                <MenuIcon />
-              </Button>
-              {isOpen && (
-                <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
-              )}
-            </div>
-            <div className="grow">
-              <Outlet />
-            </div>
+      <Sidebar />
+      <main className="grid grid-cols-12 min-h-screen">
+        <div className="col-span-12">
+          <div className="container mx-auto md:px-4 px-2">
+            <Outlet />
           </div>
         </div>
       </main>

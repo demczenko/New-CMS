@@ -27,17 +27,17 @@ const RenderArea = ({ children }) => {
           isOpen,
           targets,
           selectedData,
-          selectedNode
+          selectedNode,
         },
         functions: {
           setselectedTabAndMainId,
           setIsOpen,
           setNewTarget,
           setSelectedNode,
-          setSelectedData
+          setSelectedData,
         },
       }}>
-      {children}
+      <div className="flex">{children}</div>
     </RenderAreaContext.Provider>
   );
 };

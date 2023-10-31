@@ -40,10 +40,10 @@ const RightBar = () => {
         </div>
       )}
       {isOpen && (
-        <div className="col-span-full md:col-span-3 py-4 xl:block hidden">
+        <div className="xl:block hidden">
           <div className="container h-full mx-auto px-4">
             <div className="relative h-full">
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex justify-between gap-4 items-center mb-6">
                 <Heading title={"Select values"} />
                 <MenuIcon
                   onClick={handleMenuClose}

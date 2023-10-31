@@ -17,18 +17,17 @@ const RenderHeading = () => {
   };
 
   return (
-    <>
+    <div className="grow">
       <div className="sticky top-2">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
           <Heading title="Render" />
           <div className="space-x-2">
             <RenderForm handleForm={handleForm} />
           </div>
         </div>
       </div>
-      <hr className="my-4" />
       <Render />
-    </>
+    </div>
   );
 };
 
